@@ -1,0 +1,552 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>1.16. 概率校准 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.17. 神经网络模型（有监督）" href="neural_networks_supervised.html" />
+    <link rel="prev" title="1.15. 等式回归" href="isotonic.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/modules/calibration.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../index.html">
+          <img src="../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../tutorial/index.html">教程</a></li>
+                      <li><a href="../user_guide.html">用户指南</a></li>
+                      <li><a href="classes.html">API</a></li>
+                      <li><a href="../faq.html">FAQ</a></li>
+                      <li><a href="../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../auto_examples/index.html">示例</a></li>
+              <li><a href="../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../project-role.html">项目角色</a></li>
+                      <li><a href="../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="isotonic.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      1.15. 等式回归
+      </span>
+          <span class="hiddenrellink">
+          1.15. 等式回归
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="neural_networks_supervised.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      1.17. 神经网络模型（有监督）
+      </span>
+          <span class="hiddenrellink">
+          1.17. 神经网络模型（有监督）
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="../supervised_learning.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      1. 监督学习
+      </span>
+          <span class="hiddenrellink">
+          1. 监督学习
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">1.16. 概率校准</a></li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="calibration">
+<span id="id1"></span><h1>1.16. 概率校准<a class="headerlink" href="#calibration" title="Permalink to this headline">¶</a></h1>
+<p>执行分类时, 您经常希望不仅可以预测类标签, 还要获得相应标签的概率.
+这个概率给你一些预测的信心.
+一些模型可以给你贫乏的概率估计, 有些甚至不支持概率预测.
+校准模块可以让您更好地校准给定模型的概率, 或添加对概率预测的支持.</p>
+<p>精确校准的分类器是概率分类器, 其可以将 predict_proba 方法的输出直接解释为 confidence level（置信度级别）.
+例如，一个经过良好校准的（二元的）分类器应该对样本进行分类, 使得在给出一个接近 0.8 的 prediction_proba 值的样本中, 大约 80% 实际上属于正类.
+以下图表比较了校准不同分类器的概率预测的良好程度:</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/calibration/plot_compare_calibration.html"><img alt="modules/../auto_examples/calibration/images/sphx_glr_plot_compare_calibration_001.png" src="modules/../auto_examples/calibration/images/sphx_glr_plot_compare_calibration_001.png" /></a>
+</div>
+<p><a class="reference internal" href="generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression" title="sklearn.linear_model.LogisticRegression"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogisticRegression</span></code></a> 默认情况下返回良好的校准预测, 因为它直接优化了 log-loss（对数损失）情况.
+相反，其他方法返回 biased probabilities（偏倚概率）;
+每种方法有不同的偏差:</p>
+<ul class="simple">
+<li><a class="reference internal" href="generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB" title="sklearn.naive_bayes.GaussianNB"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianNB</span></code></a> 往往将概率推到 0 或 1（注意直方图中的计数）.
+这主要是因为它假设特征在给定类别的条件下是独立的, 在该数据集中不包含 2 个冗余特征.</li>
+</ul>
+<ul class="simple">
+<li><a class="reference internal" href="generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> 解释了相反的行为：直方图在约 0.2 和 0.9 的概率时显示峰值, 而接近 0 或 1 的概率非常罕见.
+Niculescu-Mizil 和 Caruana [4] 给出了一个解释：”诸如 bagging 和 random forests（随机森林）的方法，
+从基本模型的平均预测中可能难以将预测置于 0 和 1 附近, 因为基础模型的变化会偏离预测值, 它们应该接近于零或偏离这些值,
+因为预测被限制在 [0,1] 的间隔, 由方差引起的误差往往是靠近 0 和 1 的一边，
+例如，如果一个模型应该对于一个案例，预测 p = 0，bagging 可以实现的唯一方法是假设所有的 bagging 树预测为零.
+如果我们在 bagging 树上增加噪声, 这种噪声将导致一些树预测大于 0 的值, 因此将 bagging 的平均预测从 0 移开.
+我们用随机森林最强烈地观察到这种效应, 因为用随机森林训练的 base-level 树由于特征划分而具有相对较高的方差.
+因此，校准曲线也被称为可靠性图 (Wilks 1995 [5] _) 显示了一种典型的 sigmoid 形状,
+表明分类器可以更多地信任其 “直觉”, 并通常将接近 0 或 1 的概率返回.</li>
+</ul>
+<ul class="simple">
+<li>线性支持向量分类 (<a class="reference internal" href="generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC" title="sklearn.svm.LinearSVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearSVC</span></code></a>) 显示了作为 RandomForestClassifier 更多的 Sigmoid 曲线,
+这是经典的最大边距方法 (compare Niculescu-Mizil and Caruana <a class="footnote-reference" href="#id3" id="id2">[4]</a>),
+其重点是靠近决策边界的 hard samples（支持向量）.</li>
+</ul>
+<p>提供了执行概率预测校准的两种方法: 基于 Platt 的 Sigmoid 模型的参数化方法和基于 isotonic regression（保序回归）的非参数方法 (<a class="reference internal" href="classes.html#module-sklearn.isotonic" title="sklearn.isotonic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.isotonic</span></code></a>).
+对于不用于模型拟合的新数据, 应进行概率校准.
+类 <a class="reference internal" href="generated/sklearn.calibration.CalibratedClassifierCV.html#sklearn.calibration.CalibratedClassifierCV" title="sklearn.calibration.CalibratedClassifierCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalibratedClassifierCV</span></code></a> 使用交叉验证生成器, 并对每个拆分模型参数对训练样本和测试样本的校准进行估计.
+然后对折叠预测的概率进行平均.
+已经安装的分类器可以通过:class:<cite>CalibratedClassifierCV</cite> 传递参数 cv =”prefit” 这种方式进行校准.
+在这种情况下, 用户必须手动注意模型拟合和校准的数据是不相交的.</p>
+<p>以下图像展示了概率校准的好处.
+第一个图像显示一个具有 2 个类和 3 个数据块的数据集.
+中间的数据块包含每个类的随机样本.
+此数据块中样本的概率应为 0.5.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/calibration/plot_calibration.html"><img alt="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_001.png" src="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_001.png" /></a>
+</div>
+<p>以下图像使用没有校准的高斯朴素贝叶斯分类器, 使用 sigmoid 校准和非参数的等渗校准来显示上述估计概率的数据.
+可以观察到, 非参数模型为中间样本提供最准确的概率估计, 即0.5.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/calibration/plot_calibration.html"><img alt="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_002.png" src="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_002.png" /></a>
+</div>
+<p>对具有20个特征的100.000个样本（其中一个用于模型拟合）进行二元分类的人造数据集进行以下实验.
+在 20个 特征中，只有 2 个是信息量, 10 个是冗余的.
+该图显示了使用逻辑回归获得的估计概率, 线性支持向量分类器（SVC）和具有 sigmoid 校准和 sigmoid 校准的线性 SVC.
+校准性能使用 Brier score <a class="reference internal" href="generated/sklearn.metrics.brier_score_loss.html#sklearn.metrics.brier_score_loss" title="sklearn.metrics.brier_score_loss"><code class="xref py py-func docutils literal notranslate"><span class="pre">brier_score_loss</span></code></a> 来计算, 请看下面的图例（越销越好）.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/calibration/plot_calibration_curve.html"><img alt="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_curve_002.png" src="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_curve_002.png" /></a>
+</div>
+<p>这里可以观察到, 逻辑回归被很好地校准, 因为其曲线几乎是对角线.
+线性 SVC 的校准曲线或可靠性图具有 sigmoid 曲线, 这是一个典型的不够自信的分类器.
+在 LinearSVC 的情况下, 这是 hinge loss 的边缘属性引起的, 这使得模型集中在靠近决策边界（支持向量）的 hard samples（硬样本）上.
+这两种校准都可以解决这个问题, 并产生几乎相同的结果.
+下图显示了高斯朴素贝叶斯在相同数据上的校准曲线, 具有两种校准, 也没有校准.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/calibration/plot_calibration_curve.html"><img alt="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_curve_001.png" src="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_curve_001.png" /></a>
+</div>
+<p>可以看出， 高斯朴素贝叶斯的表现非常差, 但是以线性 SVC 的方式也是如此.
+尽管线性 SVC 显示了 sigmoid 校准曲线, 但高斯朴素贝叶斯校准曲线具有转置的 sigmoid 结构.
+这对于过分自信的分类器来说是非常经典的.
+在这种情况下，分类器的过度自信是由违反朴素贝叶斯特征独立假设的冗余特征引起的.</p>
+<p>用等渗回归法对高斯朴素贝叶斯概率的校准可以解决这个问题, 从几乎对角线校准曲线可以看出.
+Sigmoid 校准也略微改善了 brier 评分, 尽管不如非参数等渗校准那样强烈.
+这是 sigmoid 校准的固有限制，其参数形式假定为 sigmoid ，而不是转置的 sigmoid 曲线.
+然而, 非参数等渗校准模型没有这样强大的假设, 并且可以处理任何形状, 只要有足够的校准数据.
+通常，在校准曲线为 sigmoid 且校准数据有限的情况下, sigmoid 校准是优选的,
+而对于非 sigmoid 校准曲线和大量数据可用于校准的情况，等渗校准是优选的.</p>
+<p><a class="reference internal" href="generated/sklearn.calibration.CalibratedClassifierCV.html#sklearn.calibration.CalibratedClassifierCV" title="sklearn.calibration.CalibratedClassifierCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalibratedClassifierCV</span></code></a> 也可以处理涉及两个以上类的分类任务, 如果基本估计器可以这样做的话.
+在这种情况下, 分类器是以一对一的方式分别对每个类进行校准.
+当预测未知数据的概率时, 分别预测每个类的校准概率.
+由于这些概率并不总是一致, 因此执行后处理以使它们归一化.</p>
+<p>下一个图像说明了 Sigmoid 校准如何改变 3 类分类问题的预测概率.
+说明是标准的 2-simplex，其中三个角对应于三个类.
+箭头从未校准分类器预测的概率向量指向在保持验证集上的 sigmoid 校准之后由同一分类器预测的概率向量.
+颜色表示实例的真实类（red: class 1, green: class 2, blue: class 3）.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/calibration/plot_calibration_multiclass.html"><img alt="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_multiclass_000.png" src="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_multiclass_000.png" /></a>
+</div>
+<p>基础分类器是具有 25 个基本估计器（树）的随机森林分类器.
+如果这个分类器对所有 800 个训练数据点进行了训练, 那么它的预测过于自信, 从而导致了大量的对数损失.
+校准在 600 个数据点上训练的相同分类器， 其余 200 个数据点上的 method =’sigmoid’ 减少了预测的置信度， 即将概率向量从单面的边缘向中心移动:</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/calibration/plot_calibration_multiclass.html"><img alt="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_multiclass_001.png" src="modules/../auto_examples/calibration/images/sphx_glr_plot_calibration_multiclass_001.png" /></a>
+</div>
+<p>该校准导致较低的 log-loss（对数损失）.
+请注意，替代方案是增加基准估计量的数量, 这将导致对数损失类似的减少.</p>
+<div class="topic">
+<p class="topic-title first">参考:</p>
+<ul class="simple">
+<li>Obtaining calibrated probability estimates from decision trees
+and naive Bayesian classifiers, B. Zadrozny &amp; C. Elkan, ICML 2001</li>
+<li>Transforming Classifier Scores into Accurate Multiclass
+Probability Estimates, B. Zadrozny &amp; C. Elkan, (KDD 2002)</li>
+<li>Probabilistic Outputs for Support Vector Machines and Comparisons to
+Regularized Likelihood Methods, J. Platt, (1999)</li>
+</ul>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[4]</a></td><td>Predicting Good Probabilities with Supervised Learning,
+A. Niculescu-Mizil &amp; R. Caruana, ICML 2005</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[5]</td><td>On the combination of forecast probabilities for
+consecutive precipitation periods. Wea. Forecasting, 5, 640–650.,
+Wilks, D. S., 1990a</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <!-- modules/calibration.html -->
+    <div class="apachecn_doc_right">
+      校验者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@曲晓峰</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@小瑶</a><br/>
+      翻译者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@那伊抹微笑</a><br/> 
+    </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../_sources/modules/calibration.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="isotonic.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="neural_networks_supervised.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

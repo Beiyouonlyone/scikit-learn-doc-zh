@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>在鸢尾花卉数据集上绘制不同的 SVM 分类器 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Scaling the regularization parameter for SVCs" href="plot_svm_scale_c.html" />
+    <link rel="prev" title="One-class SVM with non-linear kernel (RBF)" href="plot_oneclass.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../../index.html">
+          <img src="../../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../../index.html">首页</a></li>
+              <li><a href="../../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../../tutorial/index.html">教程</a></li>
+                      <li><a href="../../user_guide.html">用户指南</a></li>
+                      <li><a href="../../modules/classes.html">API</a></li>
+                      <li><a href="../../faq.html">FAQ</a></li>
+                      <li><a href="../../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../index.html">示例</a></li>
+              <li><a href="../../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../../project-role.html">项目角色</a></li>
+                      <li><a href="../../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="plot_oneclass.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      One-class SVM...
+      </span>
+          <span class="hiddenrellink">
+          One-class SVM with non-linear kernel (RBF)
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="plot_svm_scale_c.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      Scaling the r...
+      </span>
+          <span class="hiddenrellink">
+          Scaling the regularization parameter for SVCs
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="../index.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      General examples
+      </span>
+          <span class="hiddenrellink">
+          General examples
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">在鸢尾花卉数据集上绘制不同的 SVM 分类器</a></li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="svm">
+<span id="sphx-glr-auto-examples-svm-plot-iris-py"></span><h1>在鸢尾花卉数据集上绘制不同的 SVM 分类器<a class="headerlink" href="#svm" title="Permalink to this headline">¶</a></h1>
+<p>在鸢尾花卉数据集的 2D 投影上的不同线性 SVM 分类器的比较。我们只考虑这个数据集的前 2 个特征:</p>
+<ul class="simple">
+<li>萼片长度</li>
+<li>萼片宽度</li>
+</ul>
+<p>此示例显示如何绘制具有不同 kernel 的四个 SVM 分类器的决策表面。</p>
+<p>线性模型 <code class="docutils literal notranslate"><span class="pre">LinearSVC()</span></code> 和 <code class="docutils literal notranslate"><span class="pre">SVC(kernel='linear')</span></code> 产生稍微不同的决策边界。这可能是以下差异的结果:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code> 可以最大限度地减少 squared hinge loss 而 <code class="docutils literal notranslate"><span class="pre">SVC</span></code> 最大限度地减少 regular hinge loss.</li>
+<li><code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code> 使用 One-vs-All (也被称作 One-vs-Rest) multiclass reduction ，而 <code class="docutils literal notranslate"><span class="pre">SVC</span></code> 则使用 One-vs-One multiclass reduction 。</li>
+</ul>
+<p>两个线性模型具有线性决策边界（相交超平面），而非线性内核模型（多项式或 高斯 RBF）具有更灵活的非线性决策边界，其形状取决于内核的种类及其参数。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">在绘制玩具 2D 数据集分类器的决策函数的时候可以帮助您直观了解其各自的表现力，请注意，这些直觉并不总是推广到更加接近于现实的高维度的问题。</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="c1"># 加载 numpy, matplotlib, sklearn 等模块</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span><span class="p">,</span> <span class="n">datasets</span>
+
+
+<span class="k">def</span> <span class="nf">make_meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="o">=.</span><span class="mo">02</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;创建一个要绘制的点的网格</span>
+
+<span class="sd">    参数</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x: 基于 x 轴的网格数据</span>
+<span class="sd">    y: 基于 y 轴的网格数据</span>
+<span class="sd">    h: meshgrid 的步长参数, 是可选的</span>
+
+<span class="sd">    返回</span>
+<span class="sd">    -------</span>
+<span class="sd">    xx, yy : ndarray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1"># meshgrid() 函数用两个坐标轴上的点在平面上画格。具体参阅：https://docs.scipy.org/doc/numpy/reference/generated/numpy.meshgrid.html</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span>
+                         <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span>
+
+
+<span class="k">def</span> <span class="nf">plot_contours</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;绘制分类器的决策边界.</span>
+
+<span class="sd">    参数</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax: matplotlib 轴对象</span>
+<span class="sd">    clf: 一个分类器</span>
+<span class="sd">    xx: meshgrid ndarray</span>
+<span class="sd">    yy: meshgrid ndarray</span>
+<span class="sd">    params: params 的字典传递给 contourf, 可选</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># contourf() 函数 具体用法参见：http://www.labri.fr/perso/nrougier/teaching/matplotlib/   和 http://matplotlib.org/examples/pylab_examples/contourf_demo.html</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="c1"># 加载一些需要玩的数据</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="c1"># 只取前两个特征数据，我们可以通过 2 维数据集来避免这种情况</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+
+<span class="c1"># 我们创建了一个 SVM 的实例并填充了数据。我们不扩展我们的数据，因为我们想绘制支持向量。</span>
+<span class="n">C</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># SVM 正则化参数</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">),</span>
+          <span class="n">svm</span><span class="o">.</span><span class="n">LinearSVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">),</span>
+          <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">),</span>
+          <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">))</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">models</span><span class="p">)</span>
+
+<span class="c1"># 绘图区域的标题</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;SVC with linear kernel&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;LinearSVC (linear kernel)&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;SVC with RBF kernel&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;SVC with polynomial (degree 3) kernel&#39;</span><span class="p">)</span>
+
+<span class="c1"># 设置 2x2 的网格进行绘制.</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">sub</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+
+<span class="n">X0</span><span class="p">,</span> <span class="n">X1</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">make_meshgrid</span><span class="p">(</span><span class="n">X0</span><span class="p">,</span> <span class="n">X1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">clf</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">titles</span><span class="p">,</span> <span class="n">sub</span><span class="o">.</span><span class="n">flatten</span><span class="p">()):</span>
+    <span class="n">plot_contours</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span>
+                  <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X0</span><span class="p">,</span> <span class="n">X1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xx</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">yy</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Sepal length&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Sepal width&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(())</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(())</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" download="" href="../../_downloads/0c8f0d32f8a11a0517591f5d847e5a85/plot_iris.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_iris.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" download="" href="../../_downloads/a4d9cc9ffcb602877ad5ff564a458d16/plot_iris.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_iris.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../../_sources/auto_examples/svm/plot_iris.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="plot_oneclass.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="plot_svm_scale_c.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

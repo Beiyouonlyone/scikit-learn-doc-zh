@@ -1,0 +1,773 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>1.12. 多类和多标签算法 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.13. 特征选择" href="feature_selection.html" />
+    <link rel="prev" title="1.11. 集成方法" href="ensemble.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/modules/multiclass.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../index.html">
+          <img src="../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../tutorial/index.html">教程</a></li>
+                      <li><a href="../user_guide.html">用户指南</a></li>
+                      <li><a href="classes.html">API</a></li>
+                      <li><a href="../faq.html">FAQ</a></li>
+                      <li><a href="../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../auto_examples/index.html">示例</a></li>
+              <li><a href="../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../project-role.html">项目角色</a></li>
+                      <li><a href="../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="ensemble.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      1.11. 集成方法
+      </span>
+          <span class="hiddenrellink">
+          1.11. 集成方法
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="feature_selection.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      1.13. 特征选择
+      </span>
+          <span class="hiddenrellink">
+          1.13. 特征选择
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="../supervised_learning.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      1. 监督学习
+      </span>
+          <span class="hiddenrellink">
+          1. 监督学习
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">1.12. 多类和多标签算法</a><ul>
+<li><a class="reference internal" href="#id4">1.12.1. 多标签分类格式</a></li>
+<li><a class="reference internal" href="#ovr-classification">1.12.2. 1对其余</a><ul>
+<li><a class="reference internal" href="#id6">1.12.2.1. 多类学习</a></li>
+<li><a class="reference internal" href="#id7">1.12.2.2. 多标签学习</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ovo-classification">1.12.3. 1对1</a><ul>
+<li><a class="reference internal" href="#id9">1.12.3.1. 多类别学习</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ecoc">1.12.4. 误差校正输出代码</a><ul>
+<li><a class="reference internal" href="#id12">1.12.4.1. 多类别学习</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id14">1.12.5. 多输出回归</a></li>
+<li><a class="reference internal" href="#id15">1.12.6. 多输出分类</a></li>
+<li><a class="reference internal" href="#id16">1.12.7. 链式分类器</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="multiclass">
+<span id="id1"></span><h1>1.12. 多类和多标签算法<a class="headerlink" href="#multiclass" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">All classifiers in scikit-learn do multiclass classification
+out-of-the-box. You don’t need to use the <a class="reference internal" href="classes.html#module-sklearn.multiclass" title="sklearn.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.multiclass</span></code></a> module
+unless you want to experiment with different multiclass strategies.</p>
+</div>
+<p><a class="reference internal" href="classes.html#module-sklearn.multiclass" title="sklearn.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.multiclass</span></code></a> 模块采用了 <em>元评估器</em> ，通过把``多类`` 和 <code class="docutils literal notranslate"><span class="pre">多标签</span></code> 分类问题分解为
+二元分类问题去解决。这同样适用于多目标回归问题。</p>
+<ul class="simple">
+<li><strong>Multiclass classification</strong> <strong>多类分类</strong> 意味着一个分类任务需要对多于两个类的数据进行分类。比如，对一系列的橘子，</li>
+</ul>
+<p>苹果或者梨的图片进行分类。多类分类假设每一个样本有且仅有一个标签：一个水果可以被归类为苹果，也可以
+是梨，但不能同时被归类为两类。</p>
+<ul class="simple">
+<li><strong>Multilabel classification</strong> <strong>多标签分类</strong> 给每一个样本分配一系列标签。这可以被认为是预测不</li>
+</ul>
+<p>相互排斥的数据点的属性，例如与文档类型相关的主题。一个文本可以归类为任意类别，例如可以同时为政治、金融、
+教育相关或者不属于以上任何类别。</p>
+<ul class="simple">
+<li><strong>Multioutput regression</strong> <strong>多输出分类</strong> 为每个样本分配一组目标值。这可以认为是预测每一个样本的多个属性，</li>
+</ul>
+<p>比如说一个具体地点的风的方向和大小。</p>
+<ul class="simple">
+<li><strong>Multioutput-multiclass classification</strong> and <strong>multi-task classification</strong> <a href="#id2"><span class="problematic" id="id3">**</span></a>多输出-多类分类和</li>
+</ul>
+<dl class="docutils">
+<dt>多任务分类** 意味着单个的评估器要解决多个联合的分类任务。这是只考虑二分类的 multi-label classification</dt>
+<dd><blockquote class="first">
+<div>和 multi-class classification 任务的推广。 <em>此类问题输出的格式是一个二维数组或者一个稀疏矩阵。</em></div></blockquote>
+<p>每个输出变量的标签集合可以是各不相同的。比如说，一个样本可以将“梨”作为一个输出变量的值，这个输出变
+量在一个含有“梨”、“苹果”等水果种类的有限集合中取可能的值；将“蓝色”或者“绿色”作为第二个输出变量的值，
+这个输出变量在一个含有“绿色”、“红色”、“蓝色”等颜色种类的有限集合中取可能的值…</p>
+<p class="last">这意味着任何处理 multi-output multiclass or multi-task classification 任务的分类器，在特殊的
+情况下支持 multi-label classification 任务。Multi-task classification 与具有不同模型公式
+的 multi-output classification 相似。详细情况请查阅相关的分类器的文档。</p>
+</dd>
+</dl>
+<p>所有的 scikit-learn 分类器都能处理 multiclass classification 任务，
+但是 <a class="reference internal" href="classes.html#module-sklearn.multiclass" title="sklearn.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.multiclass</span></code></a> 提供的元评估器允许改变在处理超过两类数据时的方式，因为这会对分类器的性能产生影响
+（无论是在泛化误差或者所需要的计算资源方面）</p>
+<p>下面是按照 scikit-learn 策略分组的分类器的总结，如果你使用其中的一个，则不需要此类中的元评估器，除非你想要自定义的多分类方式。</p>
+<ul class="simple">
+<li><strong>固有的多类分类器:</strong><ul>
+<li><a class="reference internal" href="generated/sklearn.naive_bayes.BernoulliNB.html#sklearn.naive_bayes.BernoulliNB" title="sklearn.naive_bayes.BernoulliNB"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.naive_bayes.BernoulliNB</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier" title="sklearn.tree.DecisionTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.DecisionTreeClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.tree.ExtraTreeClassifier.html#sklearn.tree.ExtraTreeClassifier" title="sklearn.tree.ExtraTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.ExtraTreeClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.ensemble.ExtraTreesClassifier.html#sklearn.ensemble.ExtraTreesClassifier" title="sklearn.ensemble.ExtraTreesClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.ExtraTreesClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB" title="sklearn.naive_bayes.GaussianNB"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.naive_bayes.GaussianNB</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neighbors.KNeighborsClassifier.html#sklearn.neighbors.KNeighborsClassifier" title="sklearn.neighbors.KNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neighbors.KNeighborsClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.semi_supervised.LabelPropagation.html#sklearn.semi_supervised.LabelPropagation" title="sklearn.semi_supervised.LabelPropagation"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.semi_supervised.LabelPropagation</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.semi_supervised.LabelSpreading.html#sklearn.semi_supervised.LabelSpreading" title="sklearn.semi_supervised.LabelSpreading"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.semi_supervised.LabelSpreading</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.discriminant_analysis.LinearDiscriminantAnalysis.html#sklearn.discriminant_analysis.LinearDiscriminantAnalysis" title="sklearn.discriminant_analysis.LinearDiscriminantAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.discriminant_analysis.LinearDiscriminantAnalysis</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC" title="sklearn.svm.LinearSVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.svm.LinearSVC</span></code></a> (setting multi_class=”crammer_singer”)</li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression" title="sklearn.linear_model.LogisticRegression"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.LogisticRegression</span></code></a> (setting multi_class=”multinomial”)</li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.LogisticRegressionCV.html#sklearn.linear_model.LogisticRegressionCV" title="sklearn.linear_model.LogisticRegressionCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.LogisticRegressionCV</span></code></a> (setting multi_class=”multinomial”)</li>
+<li><a class="reference internal" href="generated/sklearn.neural_network.MLPClassifier.html#sklearn.neural_network.MLPClassifier" title="sklearn.neural_network.MLPClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neural_network.MLPClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neighbors.NearestCentroid.html#sklearn.neighbors.NearestCentroid" title="sklearn.neighbors.NearestCentroid"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neighbors.NearestCentroid</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis.html#sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis" title="sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neighbors.RadiusNeighborsClassifier.html#sklearn.neighbors.RadiusNeighborsClassifier" title="sklearn.neighbors.RadiusNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neighbors.RadiusNeighborsClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.RandomForestClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.RidgeClassifier.html#sklearn.linear_model.RidgeClassifier" title="sklearn.linear_model.RidgeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.RidgeClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.RidgeClassifierCV.html#sklearn.linear_model.RidgeClassifierCV" title="sklearn.linear_model.RidgeClassifierCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.RidgeClassifierCV</span></code></a></li>
+</ul>
+</li>
+<li><strong>1对1的多类分类器:</strong><ul>
+<li><a class="reference internal" href="generated/sklearn.svm.NuSVC.html#sklearn.svm.NuSVC" title="sklearn.svm.NuSVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.svm.NuSVC</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="sklearn.svm.SVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.svm.SVC</span></code></a>.</li>
+<li><a class="reference internal" href="generated/sklearn.gaussian_process.GaussianProcessClassifier.html#sklearn.gaussian_process.GaussianProcessClassifier" title="sklearn.gaussian_process.GaussianProcessClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.gaussian_process.GaussianProcessClassifier</span></code></a> (setting multi_class = “one_vs_one”)</li>
+</ul>
+</li>
+<li><strong>1对多的多类分类器:</strong><ul>
+<li><a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingClassifier.html#sklearn.ensemble.GradientBoostingClassifier" title="sklearn.ensemble.GradientBoostingClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.GradientBoostingClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.gaussian_process.GaussianProcessClassifier.html#sklearn.gaussian_process.GaussianProcessClassifier" title="sklearn.gaussian_process.GaussianProcessClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.gaussian_process.GaussianProcessClassifier</span></code></a> (setting multi_class = “one_vs_rest”)</li>
+<li><a class="reference internal" href="generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC" title="sklearn.svm.LinearSVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.svm.LinearSVC</span></code></a> (setting multi_class=”ovr”)</li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression" title="sklearn.linear_model.LogisticRegression"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.LogisticRegression</span></code></a> (setting multi_class=”ovr”)</li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.LogisticRegressionCV.html#sklearn.linear_model.LogisticRegressionCV" title="sklearn.linear_model.LogisticRegressionCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.LogisticRegressionCV</span></code></a> (setting multi_class=”ovr”)</li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.SGDClassifier.html#sklearn.linear_model.SGDClassifier" title="sklearn.linear_model.SGDClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.SGDClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.Perceptron.html#sklearn.linear_model.Perceptron" title="sklearn.linear_model.Perceptron"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.Perceptron</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.PassiveAggressiveClassifier.html#sklearn.linear_model.PassiveAggressiveClassifier" title="sklearn.linear_model.PassiveAggressiveClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.PassiveAggressiveClassifier</span></code></a></li>
+</ul>
+</li>
+<li><strong>支持多标签分类的分类器:</strong><ul>
+<li><a class="reference internal" href="generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier" title="sklearn.tree.DecisionTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.DecisionTreeClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.tree.ExtraTreeClassifier.html#sklearn.tree.ExtraTreeClassifier" title="sklearn.tree.ExtraTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.ExtraTreeClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.ensemble.ExtraTreesClassifier.html#sklearn.ensemble.ExtraTreesClassifier" title="sklearn.ensemble.ExtraTreesClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.ExtraTreesClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neighbors.KNeighborsClassifier.html#sklearn.neighbors.KNeighborsClassifier" title="sklearn.neighbors.KNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neighbors.KNeighborsClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neural_network.MLPClassifier.html#sklearn.neural_network.MLPClassifier" title="sklearn.neural_network.MLPClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neural_network.MLPClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neighbors.RadiusNeighborsClassifier.html#sklearn.neighbors.RadiusNeighborsClassifier" title="sklearn.neighbors.RadiusNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neighbors.RadiusNeighborsClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.RandomForestClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.linear_model.RidgeClassifierCV.html#sklearn.linear_model.RidgeClassifierCV" title="sklearn.linear_model.RidgeClassifierCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.RidgeClassifierCV</span></code></a></li>
+</ul>
+</li>
+<li><strong>支持多类-多输出分类的分类器:</strong><ul>
+<li><a class="reference internal" href="generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier" title="sklearn.tree.DecisionTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.DecisionTreeClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.tree.ExtraTreeClassifier.html#sklearn.tree.ExtraTreeClassifier" title="sklearn.tree.ExtraTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.tree.ExtraTreeClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.ensemble.ExtraTreesClassifier.html#sklearn.ensemble.ExtraTreesClassifier" title="sklearn.ensemble.ExtraTreesClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.ExtraTreesClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neighbors.KNeighborsClassifier.html#sklearn.neighbors.KNeighborsClassifier" title="sklearn.neighbors.KNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neighbors.KNeighborsClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.neighbors.RadiusNeighborsClassifier.html#sklearn.neighbors.RadiusNeighborsClassifier" title="sklearn.neighbors.RadiusNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.neighbors.RadiusNeighborsClassifier</span></code></a></li>
+<li><a class="reference internal" href="generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.RandomForestClassifier</span></code></a></li>
+</ul>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">At present, no metric in <a class="reference internal" href="classes.html#module-sklearn.metrics" title="sklearn.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.metrics</span></code></a>
+supports the multioutput-multiclass classification task.</p>
+</div>
+<div class="section" id="id4">
+<h2>1.12.1. 多标签分类格式<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>在 multilabel learning 中，二元分类任务的合集表示为二进制数组：每一个样本是大小为 (n_samples, n_classes) 的二维数组中的一行二进制值，比如非0元素，表示为对应标签的
+子集。 一个数组 <code class="docutils literal notranslate"><span class="pre">np.array([[1,</span> <span class="pre">0,</span> <span class="pre">0],</span> <span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">1],</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]])</span></code> 表示第一个样本属于第 0 个标签，第二个样本属于第一个和第二个标签，第三个样本不属于任何标签。</p>
+<p>通过一系列的标签来产生多标签数据可能更为直观。 <a class="reference internal" href="generated/sklearn.preprocessing.MultiLabelBinarizer.html#sklearn.preprocessing.MultiLabelBinarizer" title="sklearn.preprocessing.MultiLabelBinarizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiLabelBinarizer</span></code></a> 转换器可以用来在标签接口和格式指示器接口之间进行转换。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MultiLabelBinarizer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MultiLabelBinarizer</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">array([[0, 0, 1, 1, 1],</span>
+<span class="go">       [0, 0, 1, 0, 0],</span>
+<span class="go">       [1, 1, 0, 1, 0],</span>
+<span class="go">       [1, 1, 1, 1, 1],</span>
+<span class="go">       [1, 1, 1, 0, 0]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ovr-classification">
+<span id="id5"></span><h2>1.12.2. 1对其余<a class="headerlink" href="#ovr-classification" title="Permalink to this headline">¶</a></h2>
+<p>这个方法也被称为 <strong>1对多</strong>, 在 <a class="reference internal" href="generated/sklearn.multiclass.OneVsRestClassifier.html#sklearn.multiclass.OneVsRestClassifier" title="sklearn.multiclass.OneVsRestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneVsRestClassifier</span></code></a> 模块中执行。 这个方法在于每一个类都将用一个分类器进行拟合。
+对于每一个分类器，该类将会和其他所有的类有所区别。除了它的计算效率之外 (只需要 <cite>n_classes</cite> 个分类器), 这种方法的优点是它具有可解释性。
+因为每一个类都可以通过有且仅有一个分类器来代表，所以通过检查一个类相关的分类器就可以获得该类的信息。这是最常用的方法，也是一个合理的默认选择。</p>
+<div class="section" id="id6">
+<h3>1.12.2.1. 多类学习<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>下面是一个使用 OvR 的一个例子：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="k">import</span> <span class="n">OneVsRestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">LinearSVC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">OneVsRestClassifier</span><span class="p">(</span><span class="n">LinearSVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,</span>
+<span class="go">       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,</span>
+<span class="go">       0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,</span>
+<span class="go">       1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1,</span>
+<span class="go">       1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,</span>
+<span class="go">       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2,</span>
+<span class="go">       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h3>1.12.2.2. 多标签学习<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="generated/sklearn.multiclass.OneVsRestClassifier.html#sklearn.multiclass.OneVsRestClassifier" title="sklearn.multiclass.OneVsRestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneVsRestClassifier</span></code></a> 1对其余分类器  也支持 multilabel classification.
+要使用该功能，给分类器提供一个指示矩阵，比如 [i,j] 表示第i个样本中的第j个标签。</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/plot_multilabel.html"><img alt="modules/../auto_examples/images/sphx_glr_plot_multilabel_001.png" src="modules/../auto_examples/images/sphx_glr_plot_multilabel_001.png" /></a>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/plot_multilabel.html#sphx-glr-auto-examples-plot-multilabel-py"><span class="std std-ref">Multilabel classification</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="ovo-classification">
+<span id="id8"></span><h2>1.12.3. 1对1<a class="headerlink" href="#ovo-classification" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="generated/sklearn.multiclass.OneVsOneClassifier.html#sklearn.multiclass.OneVsOneClassifier" title="sklearn.multiclass.OneVsOneClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneVsOneClassifier</span></code></a> 1对1分类器 将会为每一对类别构造出一个分类器，在预测阶段，收到最多投票的类别将会被挑选出来。
+当存在结时（两个类具有同样的票数的时候）， 1对1分类器会选择总分类置信度最高的类，其中总分类置信度是由下层的二元分类器
+计算出的成对置信等级累加而成。</p>
+<p>因为这需要训练出 <code class="docutils literal notranslate"><span class="pre">n_classes</span> <span class="pre">*</span> <span class="pre">(n_classes</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">/</span> <span class="pre">2</span></code> 个分类器,
+由于复杂度为 O(n_classes^2)，这个方法通常比 one-vs-the-rest 慢。然而，这个方法也有优点，比如说是在没有很好的缩放 <code class="docutils literal notranslate"><span class="pre">n_samples</span></code> 数据的核方法中。
+这是由于每个单独的学习问题只涉及一小部分数据，而 one-vs-the-rest 将会使用 <code class="docutils literal notranslate"><span class="pre">n_classes</span></code> 次完整的数据。</p>
+<div class="section" id="id9">
+<h3>1.12.3.1. 多类别学习<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example of multiclass learning using OvO:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="k">import</span> <span class="n">OneVsOneClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">LinearSVC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">OneVsOneClassifier</span><span class="p">(</span><span class="n">LinearSVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,</span>
+<span class="go">       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,</span>
+<span class="go">       0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,</span>
+<span class="go">       1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1,</span>
+<span class="go">       1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,</span>
+<span class="go">       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,</span>
+<span class="go">       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])</span>
+</pre></div>
+</div>
+<div class="topic">
+<p class="topic-title first">参考文献:</p>
+<ul class="simple">
+<li>“Pattern Recognition and Machine Learning. Springer”,
+Christopher M. Bishop, page 183, (First Edition)</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="ecoc">
+<span id="id10"></span><h2>1.12.4. 误差校正输出代码<a class="headerlink" href="#ecoc" title="Permalink to this headline">¶</a></h2>
+<p>基于Output-code的方法不同于 one-vs-the-rest 和 one-vs-one。使用这些方法，每一个类将会被映射到欧几里得空间，每一个维度上的值只能为0或者1。另一种解释它的方法是，每一个类被表示为二进制
+码（一个 由0 和 1 组成的数组）。保存 location （位置）/ 每一个类的编码的矩阵被称为 code book。编码的大小是前面提到的欧几里得空间的纬度。直观上来说，每一个类应该使用一个唯一的编码，同时，好的 code book 应该能够优化分类的精度。
+在实现上，我们使用随机产生的 code book，正如在 <a class="footnote-reference" href="#id13" id="id11">[3]</a> 提倡的方式，即使更加详尽的方法可能会在未来被加入其中。</p>
+<p>在训练时，code book 每一位的二分类器将会被训练。在预测时，分类器将映射到类空间中选中的点的附近。</p>
+<p>在 <a class="reference internal" href="generated/sklearn.multiclass.OutputCodeClassifier.html#sklearn.multiclass.OutputCodeClassifier" title="sklearn.multiclass.OutputCodeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutputCodeClassifier</span></code></a>, <code class="docutils literal notranslate"><span class="pre">code_size</span></code> 属性允许用户设置将会用到的分类器的数量。
+它是类别总数的百分比。</p>
+<p>在 0 或 1 之中的一个数字会比 one-vs-the-rest 使用更少的分类器。理论上 <code class="docutils literal notranslate"><span class="pre">log2(n_classes)</span> <span class="pre">/</span> <span class="pre">n_classes</span></code> 足以明确表示每个类。然而在实际情况中，这也许会导致不太好的精确度，因为 <code class="docutils literal notranslate"><span class="pre">log2(n_classes)</span></code> 小于 n_classes.</p>
+<p>比 1 大的数字比 one-vs-the-rest 需要更多的分类器。在这种情况下，一些分类器在理论上会纠正其他分类器的错误，因此命名为 “error-correcting” 。然而在实际上这通常不会发生，因为许多分类器的错误通常意义上来说是相关的。error-correcting output codes 和 bagging 有一个相似的作用效果。</p>
+<div class="section" id="id12">
+<h3>1.12.4.1. 多类别学习<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example of multiclass learning using Output-Codes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="k">import</span> <span class="n">OutputCodeClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">LinearSVC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">OutputCodeClassifier</span><span class="p">(</span><span class="n">LinearSVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">... </span>                           <span class="n">code_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,</span>
+<span class="go">       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,</span>
+<span class="go">       0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1,</span>
+<span class="go">       1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1,</span>
+<span class="go">       1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,</span>
+<span class="go">       2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 1, 2, 2, 2,</span>
+<span class="go">       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])</span>
+</pre></div>
+</div>
+<div class="topic">
+<p class="topic-title first">参考文献:</p>
+<ul class="simple">
+<li>“Solving multiclass learning problems via error-correcting output codes”,
+Dietterich T., Bakiri G.,
+Journal of Artificial Intelligence Research 2,
+1995.</li>
+</ul>
+<table class="docutils footnote" frame="void" id="id13" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[3]</a></td><td>“The error coding method and PICTs”,
+James G., Hastie T.,
+Journal of Computational and Graphical statistics 7,
+1998.</td></tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>“The Elements of Statistical Learning”,
+Hastie T., Tibshirani R., Friedman J., page 606 (second-edition)
+2008.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="id14">
+<h2>1.12.5. 多输出回归<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<p>多输出回归支持 <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiOutputRegressor</span></code> 可以被添加到任何回归器中。这个策略包括对每个目标拟合一个回归器。因为每一个目标可以被一个回归器精确地表示，通过检查对应的回归器，可以获取关于目标的信息。
+因为&nbsp;<code class="xref py py-class docutils literal notranslate"><span class="pre">MultiOutputRegressor</span></code> 对于每一个目标可以训练出一个回归器，所以它无法利用目标之间的相关度信息。</p>
+<p>以下是 multioutput regression（多输出回归）的示例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_regression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.multioutput</span> <span class="k">import</span> <span class="n">MultiOutputRegressor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">GradientBoostingRegressor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MultiOutputRegressor</span><span class="p">(</span><span class="n">GradientBoostingRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">array([[-154.75474165, -147.03498585,  -50.03812219],</span>
+<span class="go">       [   7.12165031,    5.12914884,  -81.46081961],</span>
+<span class="go">       [-187.8948621 , -100.44373091,   13.88978285],</span>
+<span class="go">       [-141.62745778,   95.02891072, -191.48204257],</span>
+<span class="go">       [  97.03260883,  165.34867495,  139.52003279],</span>
+<span class="go">       [ 123.92529176,   21.25719016,   -7.84253   ],</span>
+<span class="go">       [-122.25193977,  -85.16443186, -107.12274212],</span>
+<span class="go">       [ -30.170388  ,  -94.80956739,   12.16979946],</span>
+<span class="go">       [ 140.72667194,  176.50941682,  -17.50447799],</span>
+<span class="go">       [ 149.37967282,  -81.15699552,   -5.72850319]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id15">
+<h2>1.12.6. 多输出分类<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<p>Multioutput classification 支持能够被添加到任何带有 <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiOutputClassifier</span></code> 标志的分类器中. 这种方法为每一个目标训练一个分类器。
+这就允许产生多目标变量分类器。这种类的目的是扩展评估器用于评估一系列目标函数 (f1,f2,f3…,fn) ，这些函数在一个单独的预测矩阵上进行训练以此来预测一系列的响应 (y1,y2,y3…,yn)。</p>
+<p>下面是多输出分类的一个例子:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_classification</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.multioutput</span> <span class="k">import</span> <span class="n">MultiOutputClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">shuffle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_informative</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y3</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y3</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span> <span class="c1"># 10,100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_outputs</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_classes</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">forest</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">multi_target_forest</span> <span class="o">=</span> <span class="n">MultiOutputClassifier</span><span class="p">(</span><span class="n">forest</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">multi_target_forest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">array([[2, 2, 0],</span>
+<span class="go">       [1, 2, 1],</span>
+<span class="go">       [2, 1, 0],</span>
+<span class="go">       [0, 0, 2],</span>
+<span class="go">       [0, 2, 1],</span>
+<span class="go">       [0, 0, 2],</span>
+<span class="go">       [1, 1, 0],</span>
+<span class="go">       [1, 1, 1],</span>
+<span class="go">       [0, 0, 2],</span>
+<span class="go">       [2, 0, 0]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id16">
+<h2>1.12.7. 链式分类器<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<p>Classifier chains (查看 <code class="xref py py-class docutils literal notranslate"><span class="pre">ClassifierChain</span></code>) 是一种集合多个二分类器为一个单独的多标签模型的方法，这种方法能够发掘目标之间的相关性信息。</p>
+<p>对于有 N 个类的多标签分类问题，为 N 个二元分类器分配 0 到 N-1 之间的一个整数。这些整数定义了模型在 chain 中的顺序。将每个分类器拟合可用的训练数据与真实的类别标签，标签数字相对较小。</p>
+<p>当进行预测时，真正的标签将无法使用。相反，每一个模型的预测结果将会传递给链上的下一个模型作为特征来进行使用。</p>
+<p>很明显，链的顺序是十分重要的。链上的第一个模型没有关于其他标签的信息，而链上的最后一个模型将会具有所有其他标签的信息。
+在一般情况下，我们并不知道链上模型最优的顺序，因此通常会使用许多随机的顺序，将他们的预测求平均。</p>
+<div class="topic">
+<p class="topic-title first">参考文献:</p>
+<dl class="docutils">
+<dt>Jesse Read, Bernhard Pfahringer, Geoff Holmes, Eibe Frank,</dt>
+<dd>“Classifier Chains for Multi-label Classification”, 2009.</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <!-- modules/multiclass.html -->
+    <div class="apachecn_doc_right">
+      校验者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@溪流-十四号</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@大魔王飞仙</a><br/>
+      翻译者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@v</a><br/>   
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../_sources/modules/multiclass.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="ensemble.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="feature_selection.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

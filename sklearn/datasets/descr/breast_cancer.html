@@ -1,0 +1,606 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>威斯康辛州乳腺癌（诊断）数据库 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../../../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../../../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../../../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/sklearn/datasets/descr/breast_cancer.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../../../index.html">
+          <img src="../../../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../../../index.html">首页</a></li>
+              <li><a href="../../../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../../../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../../../tutorial/index.html">教程</a></li>
+                      <li><a href="../../../user_guide.html">用户指南</a></li>
+                      <li><a href="../../../modules/classes.html">API</a></li>
+                      <li><a href="../../../faq.html">FAQ</a></li>
+                      <li><a href="../../../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../../../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../../../auto_examples/index.html">示例</a></li>
+              <li><a href="../../../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../../../project-role.html">项目角色</a></li>
+                      <li><a href="../../../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../../../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../../../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../../../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../../../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../../../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../../../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../../../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">威斯康辛州乳腺癌（诊断）数据库</a><ul>
+<li><a class="reference internal" href="#id2">注释</a></li>
+<li><a class="reference internal" href="#id3">参考资料</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>威斯康辛州乳腺癌（诊断）数据库<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>注释<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>数据集特征：</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">实例数量:</th><td class="field-body"><p class="first">569</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">属性数量:</th><td class="field-body"><p class="first">30 (数值型，帮助预测的属性和类)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Attribute Information:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li>radius 半径（从中心到边缘上点的距离的平均值）</li>
+<li>texture 纹理（灰度值的标准偏差）</li>
+<li>perimeter 周长</li>
+<li>area 区域</li>
+<li>smoothness 平滑度（半径长度的局部变化）</li>
+<li>compactness 紧凑度（周长 ^ 2 /面积 - 1.0）</li>
+<li>concavity 凹面（轮廓的凹部的严重性）</li>
+<li>concave points 凹点（轮廓的凹部的数量）</li>
+<li>symmetry 对称性</li>
+<li>fractal dimension 分形维数（海岸线近似 - 1）</li>
+<li><dl class="first docutils">
+<dt>类:</dt>
+<dd><ul class="first last">
+<li>WDBC-Malignant 恶性</li>
+<li>WDBC-Benign 良性</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p class="last">对每个图像计算这些特征的平均值，标准误差，以及“最差”（因为是肿瘤）或最大值（最大的前三个值的平均值）</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;得到30个特征。例如，字段 3 是平均半径，字段 13 是半径的标准误差，字段 23 是最差半径。</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">统计摘要:</th><td class="field-body"><table border="1" class="first docutils">
+<colgroup>
+<col width="76%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&#160;</th>
+<th class="head">&#160;</th>
+<th class="head">&#160;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>radius (mean):</td>
+<td>6.981</td>
+<td>28.11</td>
+</tr>
+<tr class="row-odd"><td>texture (mean):</td>
+<td>9.71</td>
+<td>39.28</td>
+</tr>
+<tr class="row-even"><td>perimeter (mean):</td>
+<td>43.79</td>
+<td>188.5</td>
+</tr>
+<tr class="row-odd"><td>area (mean):</td>
+<td>143.5</td>
+<td>2501.0</td>
+</tr>
+<tr class="row-even"><td>smoothness (mean):</td>
+<td>0.053</td>
+<td>0.163</td>
+</tr>
+<tr class="row-odd"><td>compactness (mean):</td>
+<td>0.019</td>
+<td>0.345</td>
+</tr>
+<tr class="row-even"><td>concavity (mean):</td>
+<td>0.0</td>
+<td>0.427</td>
+</tr>
+<tr class="row-odd"><td>concave points (mean):</td>
+<td>0.0</td>
+<td>0.201</td>
+</tr>
+<tr class="row-even"><td>symmetry (mean):</td>
+<td>0.106</td>
+<td>0.304</td>
+</tr>
+<tr class="row-odd"><td>fractal dimension (mean):</td>
+<td>0.05</td>
+<td>0.097</td>
+</tr>
+<tr class="row-even"><td>radius (standard error):</td>
+<td>0.112</td>
+<td>2.873</td>
+</tr>
+<tr class="row-odd"><td>texture (standard error):</td>
+<td>0.36</td>
+<td>4.885</td>
+</tr>
+<tr class="row-even"><td>perimeter (standard error):</td>
+<td>0.757</td>
+<td>21.98</td>
+</tr>
+<tr class="row-odd"><td>area (standard error):</td>
+<td>6.802</td>
+<td>542.2</td>
+</tr>
+<tr class="row-even"><td>smoothness (standard error):</td>
+<td>0.002</td>
+<td>0.031</td>
+</tr>
+<tr class="row-odd"><td>compactness (standard error):</td>
+<td>0.002</td>
+<td>0.135</td>
+</tr>
+<tr class="row-even"><td>concavity (standard error):</td>
+<td>0.0</td>
+<td>0.396</td>
+</tr>
+<tr class="row-odd"><td>concave points (standard error):</td>
+<td>0.0</td>
+<td>0.053</td>
+</tr>
+<tr class="row-even"><td>symmetry (standard error):</td>
+<td>0.008</td>
+<td>0.079</td>
+</tr>
+<tr class="row-odd"><td>fractal dimension (standard error):</td>
+<td>0.001</td>
+<td>0.03</td>
+</tr>
+<tr class="row-even"><td>radius (worst):</td>
+<td>7.93</td>
+<td>36.04</td>
+</tr>
+<tr class="row-odd"><td>texture (worst):</td>
+<td>12.02</td>
+<td>49.54</td>
+</tr>
+<tr class="row-even"><td>perimeter (worst):</td>
+<td>50.41</td>
+<td>251.2</td>
+</tr>
+<tr class="row-odd"><td>area (worst):</td>
+<td>185.2</td>
+<td>4254.0</td>
+</tr>
+<tr class="row-even"><td>smoothness (worst):</td>
+<td>0.071</td>
+<td>0.223</td>
+</tr>
+<tr class="row-odd"><td>compactness (worst):</td>
+<td>0.027</td>
+<td>1.058</td>
+</tr>
+<tr class="row-even"><td>concavity (worst):</td>
+<td>0.0</td>
+<td>1.252</td>
+</tr>
+<tr class="row-odd"><td>concave points (worst):</td>
+<td>0.0</td>
+<td>0.291</td>
+</tr>
+<tr class="row-even"><td>symmetry (worst):</td>
+<td>0.156</td>
+<td>0.664</td>
+</tr>
+<tr class="row-odd"><td>fractal dimension (worst):</td>
+<td>0.055</td>
+<td>0.208</td>
+</tr>
+</tbody>
+</table>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">缺失属性值:</th><td class="field-body">无</td>
+</tr>
+<tr class="field-even field"><th class="field-name">类别分布:</th><td class="field-body">212 - 恶性, 357 - 良性</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">创建者:</th><td class="field-body">Dr. William H. Wolberg, W. Nick Street, Olvi L. Mangasarian</td>
+</tr>
+<tr class="field-even field"><th class="field-name">捐助者:</th><td class="field-body">Nick Street</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">日期:</th><td class="field-body">1995年11月</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>这是UCI ML（欧文加利福尼亚大学 机器学习库）威斯康星州乳腺癌（诊断）数据集的副本。
+<a class="reference external" href="https://goo.gl/U2Uwz2">https://goo.gl/U2Uwz2</a></p>
+<p>这些特征是从乳房肿块的细针抽吸术（FNA）的数字图像中计算得到，描述了图像中存在的细胞核的特征。</p>
+<p>上述的分离平面是由多表面方法树（MSM-T）[K.P.Bennett, “Decision Tree Construction Via
+Linear Programming.” Proceedings of the 4th Midwest Artificial Intelligence and
+Cognitive Science Society, pp.97-101, 1992], a classification method which uses
+linear programming to construct a decision tree.
+相关特征是在1-4的特征和1-3的分离平面中使用穷举法搜索选取出的。</p>
+<p>用于分离平面的线性规划在三维空间中描述如下：
+[K. P. Bennett and O. L. Mangasarian: “Robust Linear Programming Discrimination
+of Two Linearly Inseparable Sets”, Optimization Methods and Software 1, 1992, 23-34].</p>
+<p>该数据库也可通过UW CS ftp服务器获得：</p>
+<p>ftp ftp.cs.wisc.edu
+cd math-prog/cpo-dataset/machine-learn/WDBC/</p>
+</div>
+<div class="section" id="id3">
+<h2>参考资料<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>W.N. Street, W.H. Wolberg and O.L. Mangasarian. Nuclear feature extraction
+for breast tumor diagnosis. IS&amp;T/SPIE 1993 International Symposium on
+Electronic Imaging: Science and Technology, volume 1905, pages 861-870,
+San Jose, CA, 1993.</li>
+<li>O.L. Mangasarian, W.N. Street and W.H. Wolberg. Breast cancer diagnosis and
+prognosis via linear programming. Operations Research, 43(4), pages 570-577,
+July-August 1995.</li>
+<li>W.H. Wolberg, W.N. Street, and O.L. Mangasarian. Machine learning techniques
+to diagnose breast cancer from fine-needle aspirates. Cancer Letters 77 (1994)
+163-171.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../../../_sources/sklearn/datasets/descr/breast_cancer.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel rellarge">
+  
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

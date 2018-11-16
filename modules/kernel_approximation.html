@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>4.6. 内核近似 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.7. 成对的矩阵, 类别和核函数" href="metrics.html" />
+    <link rel="prev" title="4.5. 随机投影" href="random_projection.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/modules/kernel_approximation.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../index.html">
+          <img src="../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../tutorial/index.html">教程</a></li>
+                      <li><a href="../user_guide.html">用户指南</a></li>
+                      <li><a href="classes.html">API</a></li>
+                      <li><a href="../faq.html">FAQ</a></li>
+                      <li><a href="../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../auto_examples/index.html">示例</a></li>
+              <li><a href="../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../project-role.html">项目角色</a></li>
+                      <li><a href="../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="random_projection.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      4.5. 随机投影
+      </span>
+          <span class="hiddenrellink">
+          4.5. 随机投影
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="metrics.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      4.7. 成对的矩阵, 类别和核函数
+      </span>
+          <span class="hiddenrellink">
+          4.7. 成对的矩阵, 类别和核函数
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="../data_transforms.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      4. 数据集转换
+      </span>
+          <span class="hiddenrellink">
+          4. 数据集转换
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">4.6. 内核近似</a><ul>
+<li><a class="reference internal" href="#nystroem">4.6.1. 内核近似的 Nystroem 方法</a></li>
+<li><a class="reference internal" href="#rbf-kernel-approx">4.6.2. 径向基函数内核</a></li>
+<li><a class="reference internal" href="#additive-chi-kernel-approx">4.6.3. 加性卡方核</a></li>
+<li><a class="reference internal" href="#skewed-chi-squared-kernel">4.6.4. Skewed Chi Squared Kernel (偏斜卡方核?暂译)</a></li>
+<li><a class="reference internal" href="#id8">4.6.5. 数学方面的细节</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="kernel-approximation">
+<span id="id1"></span><h1>4.6. 内核近似<a class="headerlink" href="#kernel-approximation" title="Permalink to this headline">¶</a></h1>
+<p>这个子模块包含与某些 kernel 对应的特征映射的函数，这个会用于例如支持向量机的算法当中(see <a class="reference internal" href="svm.html#svm"><span class="std std-ref">支持向量机</span></a>)。
+下面这些特征函数对输入执行非线性转换，可以用于线性分类或者其他算法。</p>
+<p>与 <a class="reference external" href="https://en.wikipedia.org/wiki/Kernel_trick">kernel trick</a> 相比，近似的进行特征映射更适合在线学习，并能够有效
+减少学习大量数据的内存开销。使用标准核技巧的 svm 不能有效的适用到海量数据，但是使用近似内核映射的方法，对于线性 SVM 来说效果可能更好。
+而且，使用 <a class="reference internal" href="generated/sklearn.linear_model.SGDClassifier.html#sklearn.linear_model.SGDClassifier" title="sklearn.linear_model.SGDClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">SGDClassifier</span></code></a> 进行近似的内核映射，使得对海量数据进行非线性学习也成为了可能。</p>
+<p>由于近似嵌入的方法没有太多经验性的验证，所以建议将结果和使用精确的内核方法的结果进行比较。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="linear_model.html#polynomial-regression"><span class="std std-ref">多项式回归：用基函数展开线性模型</span></a> 用于精确的多项式变换。</p>
+</div>
+<div class="section" id="nystroem">
+<span id="nystroem-kernel-approx"></span><h2>4.6.1. 内核近似的 Nystroem 方法<a class="headerlink" href="#nystroem" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="generated/sklearn.kernel_approximation.Nystroem.html#sklearn.kernel_approximation.Nystroem" title="sklearn.kernel_approximation.Nystroem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Nystroem</span></code></a> 中实现了 Nystroem 方法用于低等级的近似核。它是通过采样 kernel 已经评估好的数据。默认情况下，
+<a class="reference internal" href="generated/sklearn.kernel_approximation.Nystroem.html#sklearn.kernel_approximation.Nystroem" title="sklearn.kernel_approximation.Nystroem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Nystroem</span></code></a> 使用 <code class="docutils literal notranslate"><span class="pre">rbf</span></code> kernel，但它可以使用任何内核函数和预计算内核矩阵.
+使用的样本数量 - 计算的特征维数 - 由参数 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> 给出.</p>
+</div>
+<div class="section" id="rbf-kernel-approx">
+<span id="id2"></span><h2>4.6.2. 径向基函数内核<a class="headerlink" href="#rbf-kernel-approx" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="generated/sklearn.kernel_approximation.RBFSampler.html#sklearn.kernel_approximation.RBFSampler" title="sklearn.kernel_approximation.RBFSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">RBFSampler</span></code></a> 为径向基函数核构造一个近似映射，又称为 Random Kitchen Sinks [RR2007].
+在应用线性算法（例如线性 SVM ）之前，可以使用此转换来明确建模内核映射:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.kernel_approximation</span> <span class="k">import</span> <span class="n">RBFSampler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">SGDClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rbf_feature</span> <span class="o">=</span> <span class="n">RBFSampler</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_features</span> <span class="o">=</span> <span class="n">rbf_feature</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">()</span>   
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_features</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">SGDClassifier(alpha=0.0001, average=False, class_weight=None, epsilon=0.1,</span>
+<span class="go">       eta0=0.0, fit_intercept=True, l1_ratio=0.15,</span>
+<span class="go">       learning_rate=&#39;optimal&#39;, loss=&#39;hinge&#39;, max_iter=5, n_iter=None,</span>
+<span class="go">       n_jobs=1, penalty=&#39;l2&#39;, power_t=0.5, random_state=None,</span>
+<span class="go">       shuffle=True, tol=None, verbose=0, warm_start=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_features</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>这个映射依赖于内核值的 Monte Carlo 近似.  <code class="docutils literal notranslate"><span class="pre">fit</span></code> 方法执行 Monte Carlo 采样，而该 <code class="docutils literal notranslate"><span class="pre">transform</span></code> 方法执行
+数据的映射.由于过程的固有随机性，结果可能会在不同的 <code class="docutils literal notranslate"><span class="pre">fit</span></code> 函数调用之间变化。</p>
+<p>该 <code class="docutils literal notranslate"><span class="pre">fit</span></code> 函数有两个参数:
+<code class="docutils literal notranslate"><span class="pre">n_components</span></code> 是特征变换的目标维数. <code class="docutils literal notranslate"><span class="pre">gamma</span></code> 是 RBF-kernel 的参数. <code class="docutils literal notranslate"><span class="pre">n_components</span></code> 越高，会导致更好的内核近似，
+并且将产生与内核 SVM 产生的结果更相似的结果。请注意，”拟合” 特征函数实际上不取决于 <code class="docutils literal notranslate"><span class="pre">fit</span></code> 函数传递的数据。只有数据的维数被使用。
+详情可以参考 <a class="reference internal" href="#rr2007" id="id3">[RR2007]</a>.</p>
+<p>对于给定的值 <code class="docutils literal notranslate"><span class="pre">n_components</span></code> <a class="reference internal" href="generated/sklearn.kernel_approximation.RBFSampler.html#sklearn.kernel_approximation.RBFSampler" title="sklearn.kernel_approximation.RBFSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">RBFSampler</span></code></a> 在 <a class="reference internal" href="generated/sklearn.kernel_approximation.Nystroem.html#sklearn.kernel_approximation.Nystroem" title="sklearn.kernel_approximation.Nystroem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Nystroem</span></code></a> 中使用通常不太准确，
+但是 <a class="reference internal" href="generated/sklearn.kernel_approximation.RBFSampler.html#sklearn.kernel_approximation.RBFSampler" title="sklearn.kernel_approximation.RBFSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">RBFSampler</span></code></a> 使用更大的特征空间，更容易计算。</p>
+<div class="figure align-center" id="id9">
+<a class="reference external image-reference" href="../auto_examples/plot_kernel_approximation.html"><img alt="modules/../auto_examples/images/sphx_glr_plot_kernel_approximation_002.png" src="modules/../auto_examples/images/sphx_glr_plot_kernel_approximation_002.png" /></a>
+<p class="caption"><span class="caption-text">将精确的 RBF kernel (左) 与 approximation (右) 进行比较。</span></p>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/plot_kernel_approximation.html#sphx-glr-auto-examples-plot-kernel-approximation-py"><span class="std std-ref">RBF kernels 的显示特征图近似</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="additive-chi-kernel-approx">
+<span id="id4"></span><h2>4.6.3. 加性卡方核<a class="headerlink" href="#additive-chi-kernel-approx" title="Permalink to this headline">¶</a></h2>
+<p>Additive Chi Squared Kernel (加性卡方核)是直方图的核心，通常用于计算机视觉。</p>
+<p>这里使用的 Additive Chi Squared Kernel 给出</p>
+<div class="math">
+<p><span class="math">k(x, y) = \sum_i \frac{2x_iy_i}{x_i+y_i}</span></p>
+</div><p>这个和 <code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.metrics.additive_chi2_kernel</span></code> 不完全一样.[VZ2010]_ 的作者喜欢上面的版本，因为它总是积极的。
+由于这个 kernel 是可添加的，因此可以分别处理嵌入的 <span class="math">x_i</span>. 这使得在规则的间隔类对傅里叶变换进行性才赢，代替近似的 Monte Carlo 采样。</p>
+<blockquote>
+<div><a class="reference internal" href="generated/sklearn.kernel_approximation.AdditiveChi2Sampler.html#sklearn.kernel_approximation.AdditiveChi2Sampler" title="sklearn.kernel_approximation.AdditiveChi2Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdditiveChi2Sampler</span></code></a> 类实现了这个组件采样方法. 每个组件都被采样 <span class="math">n</span> 次，每一个输入维数都会产生 <cite>2n+1</cite> 维（来自傅立叶变换的实部和复数部分的两个数据段的倍数）.
+在文献中，<span class="math">n</span> 经常取为 1 或者 2，将数据集转换为 <code class="docutils literal notranslate"><span class="pre">n_samples</span> <span class="pre">*</span> <span class="pre">5</span> <span class="pre">*</span> <span class="pre">n_features</span></code> 大小（在 <span class="math">n=2</span> 的情况下 ）.</div></blockquote>
+<p><a class="reference internal" href="generated/sklearn.kernel_approximation.AdditiveChi2Sampler.html#sklearn.kernel_approximation.AdditiveChi2Sampler" title="sklearn.kernel_approximation.AdditiveChi2Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdditiveChi2Sampler</span></code></a> 提供的近似特征映射可以和 <a class="reference internal" href="generated/sklearn.kernel_approximation.RBFSampler.html#sklearn.kernel_approximation.RBFSampler" title="sklearn.kernel_approximation.RBFSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">RBFSampler</span></code></a> 提供的近似特征映射合并，得到一个取幂的 chi squared kerne。可以查看 <a class="reference internal" href="#vz2010" id="id5">[VZ2010]</a> 和 <a class="reference internal" href="#vvz2010" id="id6">[VVZ2010]</a> <a class="reference internal" href="generated/sklearn.kernel_approximation.RBFSampler.html#sklearn.kernel_approximation.RBFSampler" title="sklearn.kernel_approximation.RBFSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">RBFSampler</span></code></a> 的合并.</p>
+</div>
+<div class="section" id="skewed-chi-squared-kernel">
+<span id="skewed-chi-kernel-approx"></span><h2>4.6.4. Skewed Chi Squared Kernel (偏斜卡方核?暂译)<a class="headerlink" href="#skewed-chi-squared-kernel" title="Permalink to this headline">¶</a></h2>
+<p>skewed chi squared kernel 给出下面公式</p>
+<div class="math">
+<p><span class="math">k(x,y) = \prod_i \frac{2\sqrt{x_i+c}\sqrt{y_i+c}}{x_i + y_i + 2c}</span></p>
+</div><p>它有和 指数卡方核 相似的属性，用于计算机视觉.但是允许进行简单的 蒙特卡洛 近似 的特征映射。</p>
+<p><a class="reference internal" href="generated/sklearn.kernel_approximation.SkewedChi2Sampler.html#sklearn.kernel_approximation.SkewedChi2Sampler" title="sklearn.kernel_approximation.SkewedChi2Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedChi2Sampler</span></code></a> 的使用和之前描述的 <a class="reference internal" href="generated/sklearn.kernel_approximation.RBFSampler.html#sklearn.kernel_approximation.RBFSampler" title="sklearn.kernel_approximation.RBFSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">RBFSampler</span></code></a> 一样.唯一的区别是自由参数，称之为 <span class="math">c</span>.
+这种映射和数学细节可以参考 <a class="reference internal" href="#ls2010" id="id7">[LS2010]</a>.</p>
+</div>
+<div class="section" id="id8">
+<h2>4.6.5. 数学方面的细节<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>核技巧 像支持向量机，或者 核化 PCA 依赖于 再生核希尔伯特空间（RKHS）
+对于任何 核函数 <span class="math">k</span> （叫做 Mercer kernel），保证了 <span class="math">\phi</span> 进入 希尔伯特空间 <span class="math">\mathcal{H}</span> 的映射，例如：</p>
+<div class="math">
+<p><span class="math">k(x,y) = \langle \phi(x), \phi(y) \rangle</span></p>
+</div><p><span class="math">\langle \cdot, \cdot \rangle</span>  是在 Hilbert space 中做内积.</p>
+<p>如果一个算法，例如线性支持向量机或者 PCA，依赖于数据集的数量级 <span class="math">x_i</span> ，可能会使用 <span class="math">k(x_i, x_j)</span> ，
+符合孙发的映射 <span class="math">\phi(x_i)</span> . 使用 <span class="math">k</span> 的优点在于 <span class="math">\phi</span> 永远不会直接计算，允许大量的特征计算（甚至是无限的）.</p>
+<p>kernel 方法的一个缺点是，在优化过程中有可能存储大量的 kernel 值 <span class="math">k(x_i, x_j)</span>.
+如果使用核函数的分类器应用于新的数据 <span class="math">y_j</span> ， <span class="math">k(x_i, y_j)</span> 需要计算用来做预测，训练集中的 <span class="math">x_i</span> 有可能有很多不同的。</p>
+<p>这个子模块的这些类中允许嵌入 <span class="math">\phi</span>，从而明确的与 <span class="math">\phi(x_i)</span> 一起工作，
+这消除了使用 kernel 的需要和存储训练样本.</p>
+<div class="topic">
+<p class="topic-title first">参考:</p>
+<table class="docutils citation" frame="void" id="rr2007" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[RR2007]</a></td><td><a class="reference external" href="http://www.robots.ox.ac.uk/~vgg/rg/papers/randomfeatures.pdf">“Random features for large-scale kernel machines”</a>
+Rahimi, A. and Recht, B. - Advances in neural information processing 2007,</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="ls2010" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[LS2010]</a></td><td><a class="reference external" href="http://www.maths.lth.se/matematiklth/personal/sminchis/papers/lis_dagm10.pdf">“Random Fourier approximations for skewed multiplicative histogram kernels”</a>
+Random Fourier approximations for skewed multiplicative histogram kernels
+- Lecture Notes for Computer Sciencd (DAGM)</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="vz2010" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[VZ2010]</a></td><td><a class="reference external" href="https://www.robots.ox.ac.uk/~vgg/publications/2011/Vedaldi11/vedaldi11.pdf">“Efficient additive kernels via explicit feature maps”</a>
+Vedaldi, A. and Zisserman, A. - Computer Vision and Pattern Recognition 2010</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="vvz2010" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[VVZ2010]</a></td><td><a class="reference external" href="https://www.robots.ox.ac.uk/~vgg/publications/2010/Sreekanth10/sreekanth10.pdf">“Generalized RBF feature maps for Efficient Detection”</a>
+Vempati, S. and Vedaldi, A. and Zisserman, A. and Jawahar, CV - 2010</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <!-- modules/kernel_approximation.html -->
+    <div class="apachecn_doc_right">
+      校验者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/FontTian">@FontTian</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@numpy</a><br/>
+      翻译者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@程威</a><br/>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../_sources/modules/kernel_approximation.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="random_projection.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="metrics.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

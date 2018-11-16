@@ -1,0 +1,1304 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>1.11. 集成方法 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.12. 多类和多标签算法" href="multiclass.html" />
+    <link rel="prev" title="1.10. 决策树" href="tree.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/modules/ensemble.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../index.html">
+          <img src="../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../tutorial/index.html">教程</a></li>
+                      <li><a href="../user_guide.html">用户指南</a></li>
+                      <li><a href="classes.html">API</a></li>
+                      <li><a href="../faq.html">FAQ</a></li>
+                      <li><a href="../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../auto_examples/index.html">示例</a></li>
+              <li><a href="../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../project-role.html">项目角色</a></li>
+                      <li><a href="../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="tree.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      1.10. 决策树
+      </span>
+          <span class="hiddenrellink">
+          1.10. 决策树
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="multiclass.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      1.12. 多类和多标签算法
+      </span>
+          <span class="hiddenrellink">
+          1.12. 多类和多标签算法
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="../supervised_learning.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      1. 监督学习
+      </span>
+          <span class="hiddenrellink">
+          1. 监督学习
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">1.11. 集成方法</a><ul>
+<li><a class="reference internal" href="#bagging-meta-estimator-bagging">1.11.1. Bagging meta-estimator（Bagging 元估计器）</a></li>
+<li><a class="reference internal" href="#forest">1.11.2. 由随机树组成的森林</a><ul>
+<li><a class="reference internal" href="#id8">1.11.2.1. 随机森林</a></li>
+<li><a class="reference internal" href="#id10">1.11.2.2. 极限随机树</a></li>
+<li><a class="reference internal" href="#id11">1.11.2.3. 参数</a></li>
+<li><a class="reference internal" href="#id12">1.11.2.4. 并行化</a></li>
+<li><a class="reference internal" href="#random-forest-feature-importance">1.11.2.5. 特征重要性评估</a></li>
+<li><a class="reference internal" href="#random-trees-embedding">1.11.2.6. 完全随机树嵌入</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adaboost">1.11.3. AdaBoost</a><ul>
+<li><a class="reference internal" href="#id20">1.11.3.1. 使用方法</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gradient-tree-boosting">1.11.4. Gradient Tree Boosting（梯度树提升）</a><ul>
+<li><a class="reference internal" href="#id22">1.11.4.1. 分类</a></li>
+<li><a class="reference internal" href="#id23">1.11.4.2. 回归</a></li>
+<li><a class="reference internal" href="#gradient-boosting-warm-start">1.11.4.3. 训练额外的弱学习器</a></li>
+<li><a class="reference internal" href="#gradient-boosting-tree-size">1.11.4.4. 控制树的大小</a></li>
+<li><a class="reference internal" href="#mathematical-formulation">1.11.4.5. Mathematical formulation（数学公式）</a><ul>
+<li><a class="reference internal" href="#loss-functions">1.11.4.5.1. Loss Functions（损失函数）</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#regularization">1.11.4.6. Regularization（正则化）</a><ul>
+<li><a class="reference internal" href="#shrinkage">1.11.4.6.1. 收缩率 (Shrinkage)</a></li>
+<li><a class="reference internal" href="#subsampling">1.11.4.6.2. 子采样 (Subsampling)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interpretation">1.11.4.7. Interpretation（解释性）</a><ul>
+<li><a class="reference internal" href="#feature-importance">1.11.4.7.1. Feature importance（特征重要性）</a></li>
+<li><a class="reference internal" href="#partial-dependence">1.11.4.7.2. Partial dependence（部分依赖）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#voting-classifier">1.11.5. Voting Classifier（投票分类器）</a><ul>
+<li><a class="reference internal" href="#id38">1.11.5.1. 多数类标签 (又称为 多数/硬投票)</a><ul>
+<li><a class="reference internal" href="#id39">1.11.5.1.1. 用法</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id40">1.11.5.2. 加权平均概率 （软投票）</a></li>
+<li><a class="reference internal" href="#votingclassifier-gridsearch">1.11.5.3. 投票分类器（VotingClassifier）在网格搜索（GridSearch）应用</a><ul>
+<li><a class="reference internal" href="#id41">1.11.5.3.1. 用法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ensemble">
+<span id="id1"></span><h1>1.11. 集成方法<a class="headerlink" href="#ensemble" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">注意，在本文中</span> <span class="pre">bagging</span> <span class="pre">和</span> <span class="pre">boosting</span> <span class="pre">为了更好的保留原文意图，不进行翻译</span></code>
+<code class="docutils literal notranslate"><span class="pre">estimator-&gt;估计器</span>&#160; <span class="pre">base</span> <span class="pre">estimator-&gt;基估计器</span></code></p>
+<p><strong>集成方法</strong> 的目标是把多个使用给定学习算法构建的基估计器的预测结果结合起来，从而获得比单个估计器更好的泛化能力/鲁棒性。</p>
+<p>集成方法通常分为两种:</p>
+<ul>
+<li><p class="first"><strong>平均方法</strong>，该方法的原理是构建多个独立的估计器，然后取它们的预测结果的平均。一般来说组合之后的估计器是会比单个估计器要好的，因为它的方差减小了。</p>
+<p><strong>示例:</strong> <a class="reference internal" href="#bagging"><span class="std std-ref">Bagging 方法</span></a> , <a class="reference internal" href="#forest"><span class="std std-ref">随机森林</span></a> , …</p>
+</li>
+<li><p class="first">相比之下，在 <strong>boosting 方法</strong> 中，基估计器是依次构建的，并且每一个基估计器都尝试去减少组合估计器的偏差。这种方法主要目的是为了结合多个弱模型，使集成的模型更加强大。</p>
+<p><strong>示例:</strong> <a class="reference internal" href="#adaboost"><span class="std std-ref">AdaBoost</span></a> , <a class="reference internal" href="#gradient-boosting"><span class="std std-ref">梯度提升树</span></a> , …</p>
+</li>
+</ul>
+<div class="section" id="bagging-meta-estimator-bagging">
+<span id="bagging"></span><h2>1.11.1. Bagging meta-estimator（Bagging 元估计器）<a class="headerlink" href="#bagging-meta-estimator-bagging" title="Permalink to this headline">¶</a></h2>
+<p>在集成算法中，bagging 方法会在原始训练集的随机子集上构建一类黑盒估计器的多个实例，然后把这些估计器的预测结果结合起来形成最终的预测结果。
+该方法通过在构建模型的过程中引入随机性，来减少基估计器的方差(例如，决策树)。
+在多数情况下，bagging 方法提供了一种非常简单的方式来对单一模型进行改进，而无需修改背后的算法。
+因为 bagging 方法可以减小过拟合，所以通常在强分类器和复杂模型上使用时表现的很好（例如，完全决策树，fully developed decision trees），相比之下 boosting 方法则在弱模型上表现更好（例如，浅层决策树，shallow decision trees）。</p>
+<p>bagging 方法有很多种，其主要区别在于随机抽取训练子集的方法不同：</p>
+<blockquote>
+<div><ul class="simple">
+<li>如果抽取的数据集的随机子集是样例的随机子集，我们叫做粘贴 (Pasting) <a class="reference internal" href="#b1999" id="id2">[B1999]</a> 。</li>
+<li>如果样例抽取是有放回的，我们称为 Bagging <a class="reference internal" href="#b1996" id="id3">[B1996]</a> 。</li>
+<li>如果抽取的数据集的随机子集是特征的随机子集，我们叫做随机子空间 (Random Subspaces) <a class="reference internal" href="#h1998" id="id4">[H1998]</a> 。</li>
+<li>最后，如果基估计器构建在对于样本和特征抽取的子集之上时，我们叫做随机补丁 (Random Patches) <a class="reference internal" href="#lg2012" id="id5">[LG2012]</a> 。</li>
+</ul>
+</div></blockquote>
+<p>在 scikit-learn 中，bagging 方法使用统一的 <a class="reference internal" href="generated/sklearn.ensemble.BaggingClassifier.html#sklearn.ensemble.BaggingClassifier" title="sklearn.ensemble.BaggingClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaggingClassifier</span></code></a> 元估计器（或者 <a class="reference internal" href="generated/sklearn.ensemble.BaggingRegressor.html#sklearn.ensemble.BaggingRegressor" title="sklearn.ensemble.BaggingRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaggingRegressor</span></code></a> ），输入的参数和随机子集抽取策略由用户指定。<code class="docutils literal notranslate"><span class="pre">max_samples</span></code> 和 <code class="docutils literal notranslate"><span class="pre">max_features</span></code> 控制着子集的大小（对于样例和特征）， <code class="docutils literal notranslate"><span class="pre">bootstrap</span></code> 和 <code class="docutils literal notranslate"><span class="pre">bootstrap_features</span></code> 控制着样例和特征的抽取是有放回还是无放回的。
+当使用样本子集时，通过设置 <code class="docutils literal notranslate"><span class="pre">oob_score=True</span></code> ，可以使用袋外(out-of-bag)样本来评估泛化精度。下面的代码片段说明了如何构造一个 <code class="xref py py-class docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code> 估计器的 bagging 集成实例，每一个基估计器都建立在 50% 的样本随机子集和 50% 的特征随机子集上。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">BaggingClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bagging</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">KNeighborsClassifier</span><span class="p">(),</span>
+<span class="gp">... </span>                            <span class="n">max_samples</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_bias_variance.html#sphx-glr-auto-examples-ensemble-plot-bias-variance-py"><span class="std std-ref">Single estimator versus bagging: bias-variance decomposition</span></a></li>
+</ul>
+</div>
+<div class="topic">
+<p class="topic-title first">参考文献</p>
+<table class="docutils citation" frame="void" id="b1999" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[B1999]</a></td><td>L. Breiman, “Pasting small votes for classification in large
+databases and on-line”, Machine Learning, 36(1), 85-103, 1999.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="b1996" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[B1996]</a></td><td>L. Breiman, “Bagging predictors”, Machine Learning, 24(2),
+123-140, 1996.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="h1998" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[H1998]</a></td><td>T. Ho, “The random subspace method for constructing decision
+forests”, Pattern Analysis and Machine Intelligence, 20(8), 832-844,
+1998.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lg2012" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[LG2012]</a></td><td>G. Louppe and P. Geurts, “Ensembles on Random Patches”,
+Machine Learning and Knowledge Discovery in Databases, 346-361, 2012.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="forest">
+<span id="id6"></span><h2>1.11.2. 由随机树组成的森林<a class="headerlink" href="#forest" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="classes.html#module-sklearn.ensemble" title="sklearn.ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.ensemble</span></code></a> 模块包含两个基于 <a class="reference internal" href="tree.html#tree"><span class="std std-ref">随机决策树</span></a> 的平均算法： RandomForest 算法和 Extra-Trees 算法。
+这两种算法都是专门为树而设计的扰动和组合技术（perturb-and-combine techniques） <a class="reference internal" href="#b1998" id="id7">[B1998]</a> 。
+这种技术通过在分类器构造过程中引入随机性来创建一组不同的分类器。集成分类器的预测结果就是单个分类器预测结果的平均值。</p>
+<p>与其他分类器一样，森林分类器必须拟合（fit）两个数组：
+保存训练样本的数组（或稀疏或稠密的）X，大小为 <code class="docutils literal notranslate"><span class="pre">[n_samples,</span> <span class="pre">n_features]</span></code>，和
+保存训练样本目标值（类标签）的数组 Y，大小为 <code class="docutils literal notranslate"><span class="pre">[n_samples]</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>同 <a class="reference internal" href="tree.html#tree"><span class="std std-ref">决策树</span></a> 一样，随机森林算法（forests of trees）也能用来解决 <a class="reference internal" href="tree.html#tree-multioutput"><span class="std std-ref">多输出问题</span></a> （如果 Y 的大小是 <code class="docutils literal notranslate"><span class="pre">[n_samples,</span><span class="pre">n_outputs])</span></code> ）。</p>
+<div class="section" id="id8">
+<h3>1.11.2.1. 随机森林<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>在随机森林中（参见 <a class="reference internal" href="generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> 和 <a class="reference internal" href="generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="sklearn.ensemble.RandomForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestRegressor</span></code></a> 类），
+集成模型中的每棵树构建时的样本都是由训练集经过有放回抽样得来的（例如，自助采样法-bootstrap sample，这里采用西瓜书中的译法）。
+另外，在构建树的过程中进行结点分割时，选择的分割点不再是所有特征中最佳分割点，而是特征的一个随机子集中的最佳分割点。
+由于这种随机性，森林的偏差通常会有略微的增大（相对于单个非随机树的偏差），但是由于取了平均，其方差也会减小，通常能够补偿偏差的增加，从而产生一个总体上更好的模型。</p>
+<p>与原始文献 <a class="reference internal" href="#b2001" id="id9">[B2001]</a> 不同的是，scikit-learn 的实现是取每个分类器预测概率的平均，而不是让每个分类器对类别进行投票。</p>
+</div>
+<div class="section" id="id10">
+<h3>1.11.2.2. 极限随机树<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>在极限随机树中（参见 <a class="reference internal" href="generated/sklearn.ensemble.ExtraTreesClassifier.html#sklearn.ensemble.ExtraTreesClassifier" title="sklearn.ensemble.ExtraTreesClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtraTreesClassifier</span></code></a> 和 <a class="reference internal" href="generated/sklearn.ensemble.ExtraTreesRegressor.html#sklearn.ensemble.ExtraTreesRegressor" title="sklearn.ensemble.ExtraTreesRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtraTreesRegressor</span></code></a> 类)，
+计算分割点方法中的随机性进一步增强。
+在随机森林中，使用的特征是候选特征的随机子集；不同于寻找最具有区分度的阈值，
+这里的阈值是针对每个候选特征随机生成的，并且选择这些随机生成的阈值中的最佳者作为分割规则。
+这种做法通常能够减少一点模型的方差，代价则是略微地增大偏差：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">cross_val_score</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_blobs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">ExtraTreesClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">DecisionTreeClassifier</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>                             <span class="c1"># doctest: +ELLIPSIS</span>
+<span class="go">0.97...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>                             <span class="c1"># doctest: +ELLIPSIS</span>
+<span class="go">0.999...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">ExtraTreesClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.999</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/ensemble/plot_forest_iris.html"><img alt="modules/../auto_examples/ensemble/images/sphx_glr_plot_forest_iris_001.png" src="modules/../auto_examples/ensemble/images/sphx_glr_plot_forest_iris_001.png" /></a>
+</div>
+</div>
+<div class="section" id="id11">
+<h3>1.11.2.3. 参数<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p>使用这些方法时要调整的参数主要是 <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> 和 <code class="docutils literal notranslate"><span class="pre">max_features</span></code>。
+前者（n_estimators）是森林里树的数量，通常数量越大，效果越好，但是计算时间也会随之增加。
+此外要注意，当树的数量超过一个临界值之后，算法的效果并不会很显著地变好。
+后者（max_features）是分割节点时考虑的特征的随机子集的大小。
+这个值越低，方差减小得越多，但是偏差的增大也越多。
+根据经验，回归问题中使用 <code class="docutils literal notranslate"><span class="pre">max_features</span> <span class="pre">=</span> <span class="pre">n_features</span></code> ，
+分类问题使用 <code class="docutils literal notranslate"><span class="pre">max_features</span> <span class="pre">=</span> <span class="pre">sqrt（n_features</span></code>
+（其中 <code class="docutils literal notranslate"><span class="pre">n_features</span></code> 是特征的个数）是比较好的默认值。
+<code class="docutils literal notranslate"><span class="pre">max_depth</span> <span class="pre">=</span> <span class="pre">None</span></code> 和 <code class="docutils literal notranslate"><span class="pre">min_samples_split</span> <span class="pre">=</span> <span class="pre">2</span></code> 结合通常会有不错的效果（即生成完全的树）。
+请记住，这些（默认）值通常不是最佳的，同时还可能消耗大量的内存，最佳参数值应由交叉验证获得。
+另外，请注意，在随机森林中，默认使用自助采样法（<code class="docutils literal notranslate"><span class="pre">bootstrap</span> <span class="pre">=</span> <span class="pre">True</span></code>），
+然而 extra-trees 的默认策略是使用整个数据集（<code class="docutils literal notranslate"><span class="pre">bootstrap</span> <span class="pre">=</span> <span class="pre">False</span></code>）。
+当使用自助采样法方法抽样时，泛化精度是可以通过剩余的或者袋外的样本来估算的，设置 <code class="docutils literal notranslate"><span class="pre">oob_score</span> <span class="pre">=</span> <span class="pre">True</span></code> 即可实现。</p>
+<div class="topic">
+<p class="topic-title first">提示:</p>
+<p>默认参数下模型复杂度是：<code class="docutils literal notranslate"><span class="pre">O(M*N*log(N))</span></code> ，
+其中 <code class="docutils literal notranslate"><span class="pre">M</span></code> 是树的数目， <code class="docutils literal notranslate"><span class="pre">N</span></code> 是样本数。
+可以通过设置以下参数来降低模型复杂度： <code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code> , <code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code> , <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span></code> 和 <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> 。</p>
+</div>
+</div>
+<div class="section" id="id12">
+<h3>1.11.2.4. 并行化<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>最后，这个模块还支持树的并行构建和预测结果的并行计算，这可以通过 <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> 参数实现。
+如果设置 <code class="docutils literal notranslate"><span class="pre">n_jobs</span> <span class="pre">=</span> <span class="pre">k</span></code> ，则计算被划分为 <code class="docutils literal notranslate"><span class="pre">k</span></code> 个作业，并运行在机器的 <code class="docutils literal notranslate"><span class="pre">k</span></code> 个核上。
+如果设置 <code class="docutils literal notranslate"><span class="pre">n_jobs</span> <span class="pre">=</span> <span class="pre">-1</span></code> ，则使用机器的所有核。
+注意由于进程间通信具有一定的开销，这里的提速并不是线性的（即，使用 <code class="docutils literal notranslate"><span class="pre">k</span></code> 个作业不会快 <code class="docutils literal notranslate"><span class="pre">k</span></code> 倍）。
+当然，在建立大量的树，或者构建单个树需要相当长的时间（例如，在大数据集上）时，（通过并行化）仍然可以实现显著的加速。</p>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_forest_iris.html#sphx-glr-auto-examples-ensemble-plot-forest-iris-py"><span class="std std-ref">Plot the decision surfaces of ensembles of trees on the iris dataset</span></a></li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_forest_importances_faces.html#sphx-glr-auto-examples-ensemble-plot-forest-importances-faces-py"><span class="std std-ref">Pixel importances with a parallel forest of trees</span></a></li>
+<li><a class="reference internal" href="../auto_examples/plot_multioutput_face_completion.html#sphx-glr-auto-examples-plot-multioutput-face-completion-py"><span class="std std-ref">用多输出估算器进行面部修复</span></a></li>
+</ul>
+</div>
+<div class="topic">
+<p class="topic-title first">参考文献</p>
+<table class="docutils citation" frame="void" id="b2001" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[B2001]</a></td><td><ol class="first last upperalpha simple" start="12">
+<li>Breiman, “Random Forests”, Machine Learning, 45(1), 5-32, 2001.</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="b1998" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[B1998]</a></td><td><ol class="first last upperalpha simple" start="12">
+<li>Breiman, “Arcing Classifiers”, Annals of Statistics 1998.</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>P. Geurts, D. Ernst., and L. Wehenkel, “Extremely randomized
+trees”, Machine Learning, 63(1), 3-42, 2006.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="random-forest-feature-importance">
+<span id="id13"></span><h3>1.11.2.5. 特征重要性评估<a class="headerlink" href="#random-forest-feature-importance" title="Permalink to this headline">¶</a></h3>
+<p>特征对目标变量预测的相对重要性可以通过（树中的决策节点的）特征使用的相对顺序（即深度）来进行评估。
+决策树顶部使用的特征对更大一部分输入样本的最终预测决策做出贡献；因此，可以使用接受每个特征对最终预测的贡献的样本比例来评估该 <strong>特征的相对重要性</strong> 。</p>
+<p>通过对多个随机树中的 <strong>预期贡献率</strong> （expected activity rates） <strong>取平均</strong>，可以减少这种估计的 <strong>方差</strong> ，并将其用于特征选择。</p>
+<p>下面的例子展示了一个面部识别任务中每个像素的相对重要性，其中重要性由颜色（的深浅）来表示，使用的模型是 <a class="reference internal" href="generated/sklearn.ensemble.ExtraTreesClassifier.html#sklearn.ensemble.ExtraTreesClassifier" title="sklearn.ensemble.ExtraTreesClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtraTreesClassifier</span></code></a> 。</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/ensemble/plot_forest_importances_faces.html"><img alt="modules/../auto_examples/ensemble/images/sphx_glr_plot_forest_importances_faces_001.png" src="modules/../auto_examples/ensemble/images/sphx_glr_plot_forest_importances_faces_001.png" /></a>
+</div>
+<p>实际上，对于训练完成的模型这些估计值存储在 <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> 属性中。
+这是一个大小为 <code class="docutils literal notranslate"><span class="pre">(n_features,)</span></code> 的数组，其每个元素值为正，并且总和为 1.0。一个元素的值越高，其对应的特征对预测函数的贡献越大。</p>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_forest_importances_faces.html#sphx-glr-auto-examples-ensemble-plot-forest-importances-faces-py"><span class="std std-ref">Pixel importances with a parallel forest of trees</span></a></li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_forest_importances.html#sphx-glr-auto-examples-ensemble-plot-forest-importances-py"><span class="std std-ref">Feature importances with forests of trees</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="random-trees-embedding">
+<span id="id14"></span><h3>1.11.2.6. 完全随机树嵌入<a class="headerlink" href="#random-trees-embedding" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="generated/sklearn.ensemble.RandomTreesEmbedding.html#sklearn.ensemble.RandomTreesEmbedding" title="sklearn.ensemble.RandomTreesEmbedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomTreesEmbedding</span></code></a> 实现了一个无监督的数据转换。
+通过由完全随机树构成的森林，<a class="reference internal" href="generated/sklearn.ensemble.RandomTreesEmbedding.html#sklearn.ensemble.RandomTreesEmbedding" title="sklearn.ensemble.RandomTreesEmbedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomTreesEmbedding</span></code></a> 使用数据最终归属的叶子节点的索引值（编号）对数据进行编码。
+该索引以 one-of-K 方式编码，最终形成一个高维的稀疏二进制编码。 这种编码可以被非常高效地计算出来，并且可以作为其他学习任务的基础。
+编码的大小和稀疏度可以通过选择树的数量和每棵树的最大深度来确定。对于集成中的每棵树的每个节点包含一个实例（校对者注：这里真的没搞懂）。
+编码的大小（维度）最多为 <code class="docutils literal notranslate"><span class="pre">n_estimators</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">**</span> <span class="pre">max_depth</span></code> ，即森林中的叶子节点的最大数。</p>
+<p>由于相邻数据点更可能位于树的同一叶子中，该变换可以作为一种隐式地非参数密度估计。</p>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_random_forest_embedding.html#sphx-glr-auto-examples-ensemble-plot-random-forest-embedding-py"><span class="std std-ref">Hashing feature transformation using Totally Random Trees</span></a></li>
+<li><a class="reference internal" href="../auto_examples/manifold/plot_lle_digits.html#sphx-glr-auto-examples-manifold-plot-lle-digits-py"><span class="std std-ref">Manifold learning on handwritten digits: Locally Linear Embedding, Isomap…</span></a> 比较了手写体数字的非线性降维技术。</li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_feature_transformation.html#sphx-glr-auto-examples-ensemble-plot-feature-transformation-py"><span class="std std-ref">Feature transformations with ensembles of trees</span></a> 比较了基于树的有监督和无监督特征变换.</li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="manifold.html#manifold"><span class="std std-ref">流形学习</span></a> 方法也可以用于特征空间的非线性表示, 以及降维.</p>
+</div>
+</div>
+</div>
+<div class="section" id="adaboost">
+<span id="id15"></span><h2>1.11.3. AdaBoost<a class="headerlink" href="#adaboost" title="Permalink to this headline">¶</a></h2>
+<p>模型 <a class="reference internal" href="classes.html#module-sklearn.ensemble" title="sklearn.ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.ensemble</span></code></a> 包含了流行的提升算法 AdaBoost, 这个算法是由 Freund and Schapire 在 1995 年提出来的 <a class="reference internal" href="#fs1995" id="id16">[FS1995]</a>.</p>
+<p>AdaBoost 的核心思想是用反复修改的数据（校对者注：主要是修正数据的权重）来训练一系列的弱学习器(一个弱学习器模型仅仅比随机猜测好一点,
+比如一个简单的决策树),由这些弱学习器的预测结果通过加权投票(或加权求和)的方式组合,
+得到我们最终的预测结果。在每一次所谓的提升（boosting）迭代中，数据的修改由应用于每一个训练样本的（新）
+的权重 <span class="math">w_1</span>, <span class="math">w_2</span>, …, <span class="math">w_N</span> 组成（校对者注：即修改每一个训练样本应用于新一轮学习器的权重）。
+初始化时,将所有弱学习器的权重都设置为 <span class="math">w_i = 1/N</span> ,因此第一次迭代仅仅是通过原始数据训练出一个弱学习器。在接下来的
+连续迭代中,样本的权重逐个地被修改,学习算法也因此要重新应用这些已经修改的权重。在给定的一个迭代中,
+那些在上一轮迭代中被预测为错误结果的样本的权重将会被增加，而那些被预测为正确结果的样本的权
+重将会被降低。随着迭代次数的增加，那些难以预测的样例的影响将会越来越大，每一个随后的弱学习器都将
+会被强迫更加关注那些在之前被错误预测的样例 <a class="reference internal" href="#htf" id="id17">[HTF]</a>.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/ensemble/plot_adaboost_hastie_10_2.html"><img alt="modules/../auto_examples/ensemble/images/sphx_glr_plot_adaboost_hastie_10_2_001.png" src="modules/../auto_examples/ensemble/images/sphx_glr_plot_adaboost_hastie_10_2_001.png" /></a>
+</div>
+<p>AdaBoost 既可以用在分类问题也可以用在回归问题中:</p>
+<blockquote>
+<div><ul class="simple">
+<li>对于 multi-class 分类， <a class="reference internal" href="generated/sklearn.ensemble.AdaBoostClassifier.html#sklearn.ensemble.AdaBoostClassifier" title="sklearn.ensemble.AdaBoostClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdaBoostClassifier</span></code></a> 实现了 AdaBoost-SAMME 和 AdaBoost-SAMME.R <a class="reference internal" href="#zzrh2009" id="id18">[ZZRH2009]</a>.</li>
+<li>对于回归， <a class="reference internal" href="generated/sklearn.ensemble.AdaBoostRegressor.html#sklearn.ensemble.AdaBoostRegressor" title="sklearn.ensemble.AdaBoostRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdaBoostRegressor</span></code></a> 实现了 AdaBoost.R2 <a class="reference internal" href="#d1997" id="id19">[D1997]</a>.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="id20">
+<h3>1.11.3.1. 使用方法<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<p>下面的例子展示了如何训练一个包含 100 个弱学习器的 AdaBoost 分类器:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">cross_val_score</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_iris</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">AdaBoostClassifier</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>                             
+<span class="go">0.9...</span>
+</pre></div>
+</div>
+<p>弱学习器的数量由参数 <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> 来控制。 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 参数用来控制每个弱学习器对
+最终的结果的贡献程度（校对者注：其实应该就是控制每个弱学习器的权重修改速率，这里不太记得了，不确定）。
+弱学习器默认使用决策树。不同的弱学习器可以通过参数 <code class="docutils literal notranslate"><span class="pre">base_estimator</span></code> 来指定。
+获取一个好的预测结果主要需要调整的参数是 <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> 和 <code class="docutils literal notranslate"><span class="pre">base_estimator</span></code> 的复杂度
+(例如:对于弱学习器为决策树的情况，树的深度 <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> 或叶子节点的最小样本数 <code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>
+等都是控制树的复杂度的参数)</p>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_adaboost_hastie_10_2.html#sphx-glr-auto-examples-ensemble-plot-adaboost-hastie-10-2-py"><span class="std std-ref">Discrete versus Real AdaBoost</span></a> 使用 AdaBoost-SAMME 和 AdaBoost-SAMME.R 比较 decision stump， decision tree（决策树）和 boosted decision stump（增强决策树）的分类错误。</li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_adaboost_multiclass.html#sphx-glr-auto-examples-ensemble-plot-adaboost-multiclass-py"><span class="std std-ref">Multi-class AdaBoosted Decision Trees</span></a> 展示了 AdaBoost-SAMME 和 AdaBoost-SAMME.R 在 multi-class （多类）问题上的性能。</li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_adaboost_twoclass.html#sphx-glr-auto-examples-ensemble-plot-adaboost-twoclass-py"><span class="std std-ref">Two-class AdaBoost</span></a> 展示了使用 AdaBoost-SAMME 的非线性可分两类问题的决策边界和决策函数值。</li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_adaboost_regression.html#sphx-glr-auto-examples-ensemble-plot-adaboost-regression-py"><span class="std std-ref">使用 AdaBoost 的决策树回归</span></a> 使用 AdaBoost.R2 算法证明了回归。</li>
+</ul>
+</div>
+<div class="topic">
+<p class="topic-title first">参考文献:</p>
+<table class="docutils citation" frame="void" id="fs1995" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id16">[FS1995]</a></td><td>Y. Freund, and R. Schapire, “A Decision-Theoretic Generalization of
+On-Line Learning and an Application to Boosting”, 1997.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="zzrh2009" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id18">[ZZRH2009]</a></td><td>J. Zhu, H. Zou, S. Rosset, T. Hastie. “Multi-class AdaBoost”,
+2009.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d1997" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id19">[D1997]</a></td><td><ol class="first last upperalpha simple" start="8">
+<li>Drucker. “Improving Regressors using Boosting Techniques”, 1997.</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="htf" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id17">[HTF]</a></td><td>T. Hastie, R. Tibshirani and J. Friedman, “Elements of
+Statistical Learning Ed. 2”, Springer, 2009.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="gradient-tree-boosting">
+<span id="gradient-boosting"></span><h2>1.11.4. Gradient Tree Boosting（梯度树提升）<a class="headerlink" href="#gradient-tree-boosting" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Gradient_boosting">Gradient Tree Boosting</a>
+或梯度提升回归树（GBRT）是对于任意的可微损失函数的提升算法的泛化。 GBRT 是一个准确高效的现有程序，
+它既能用于分类问题也可以用于回归问题。梯度树提升模型被应用到各种领域，包括网页搜索排名和生态领域。</p>
+<p>GBRT 的优点:</p>
+<blockquote>
+<div><ul class="simple">
+<li>对混合型数据的自然处理（异构特征）</li>
+<li>强大的预测能力</li>
+<li>在输出空间中对异常点的鲁棒性(通过具有鲁棒性的损失函数实现)</li>
+</ul>
+</div></blockquote>
+<p>GBRT 的缺点:</p>
+<blockquote>
+<div><ul class="simple">
+<li>可扩展性差（校对者注：此处的可扩展性特指在更大规模的数据集/复杂度更高的模型上使用的能力，而非我们通常说的功能的扩展性；GBRT 支持自定义的损失函数，从这个角度看它的扩展性还是很强的！）。由于提升算法的有序性(也就是说下一步的结果依赖于上一步)，因此很难做并行.</li>
+</ul>
+</div></blockquote>
+<p>模块 <a class="reference internal" href="classes.html#module-sklearn.ensemble" title="sklearn.ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.ensemble</span></code></a> 通过梯度提升树提供了分类和回归的方法.</p>
+<div class="section" id="id22">
+<h3>1.11.4.1. 分类<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingClassifier.html#sklearn.ensemble.GradientBoostingClassifier" title="sklearn.ensemble.GradientBoostingClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientBoostingClassifier</span></code></a> 既支持二分类又支持多分类问题。
+下面的例子展示了如何训练一个包含 100 个决策树弱学习器的梯度提升分类器:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_hastie_10_2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">GradientBoostingClassifier</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_hastie_10_2</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">2000</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2000</span><span class="p">:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">2000</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">2000</span><span class="p">:]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>                 
+<span class="go">0.913...</span>
+</pre></div>
+</div>
+<p>弱学习器(例如:回归树)的数量由参数 <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> 来控制；每个树的大小可以通过由参数 <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> 设置树的深度，或者由参数 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span></code> 设置叶子节点数目来控制。 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 是一个在 (0,1] 之间的超参数，这个参数通过 shrinkage(缩减步长) 来控制过拟合。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">超过两类的分类问题需要在每一次迭代时推导 <code class="docutils literal notranslate"><span class="pre">n_classes</span></code> 个回归树。因此，所有的需要推导的树数量等于 <code class="docutils literal notranslate"><span class="pre">n_classes</span> <span class="pre">*</span> <span class="pre">n_estimators</span></code> 。对于拥有大量类别的数据集我们强烈推荐使用 <a class="reference internal" href="generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> 来代替 <a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingClassifier.html#sklearn.ensemble.GradientBoostingClassifier" title="sklearn.ensemble.GradientBoostingClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientBoostingClassifier</span></code></a> 。</p>
+</div>
+</div>
+<div class="section" id="id23">
+<h3>1.11.4.2. 回归<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<p>对于回归问题 <a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingRegressor.html#sklearn.ensemble.GradientBoostingRegressor" title="sklearn.ensemble.GradientBoostingRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientBoostingRegressor</span></code></a> 支持一系列 <a class="reference internal" href="#gradient-boosting-loss"><span class="std std-ref">different loss functions</span></a> ，这些损失函数可以通过参数 <code class="docutils literal notranslate"><span class="pre">loss</span></code> 来指定；对于回归问题默认的损失函数是最小二乘损失函数（ <code class="docutils literal notranslate"><span class="pre">'ls'</span></code> ）。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_squared_error</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_friedman1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">GradientBoostingRegressor</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_friedman1</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">200</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">200</span><span class="p">:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">200</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">200</span><span class="p">:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">est</span> <span class="o">=</span> <span class="n">GradientBoostingRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;ls&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">est</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>    
+<span class="go">5.00...</span>
+</pre></div>
+</div>
+<p>下图展示了应用损失函数为最小二乘损失，基学习器个数为 500 的 <a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingRegressor.html#sklearn.ensemble.GradientBoostingRegressor" title="sklearn.ensemble.GradientBoostingRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientBoostingRegressor</span></code></a> 来处理 <a class="reference internal" href="generated/sklearn.datasets.load_boston.html#sklearn.datasets.load_boston" title="sklearn.datasets.load_boston"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.datasets.load_boston</span></code></a> 数据集的结果。左图表示每一次迭代的训练误差和测试误差。每一次迭代的训练误差保存在提升树模型的 <code class="xref py py-attr docutils literal notranslate"><span class="pre">train_score_</span></code> 属性中，每一次迭代的测试误差能够通过
+<a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingRegressor.html#sklearn.ensemble.GradientBoostingRegressor.staged_predict" title="sklearn.ensemble.GradientBoostingRegressor.staged_predict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">staged_predict</span></code></a> 方法获取，该方法返回一个生成器，用来产生每一
+个迭代的预测结果。类似下面这样的图表，可以用于决定最优的树的数量，从而进行提前停止。右图表示每个特征的重要性，它
+可以通过 <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> 属性来获取.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/ensemble/plot_gradient_boosting_regression.html"><img alt="modules/../auto_examples/ensemble/images/sphx_glr_plot_gradient_boosting_regression_001.png" src="modules/../auto_examples/ensemble/images/sphx_glr_plot_gradient_boosting_regression_001.png" /></a>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_gradient_boosting_regression.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-regression-py"><span class="std std-ref">Gradient Boosting regression</span></a></li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_gradient_boosting_oob.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-oob-py"><span class="std std-ref">Gradient Boosting Out-of-Bag estimates</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="gradient-boosting-warm-start">
+<span id="id24"></span><h3>1.11.4.3. 训练额外的弱学习器<a class="headerlink" href="#gradient-boosting-warm-start" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingRegressor.html#sklearn.ensemble.GradientBoostingRegressor" title="sklearn.ensemble.GradientBoostingRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientBoostingRegressor</span></code></a> 和 <a class="reference internal" href="generated/sklearn.ensemble.GradientBoostingClassifier.html#sklearn.ensemble.GradientBoostingClassifier" title="sklearn.ensemble.GradientBoostingClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientBoostingClassifier</span></code></a> 都支持设置参数 <code class="docutils literal notranslate"><span class="pre">warm_start=True</span></code> ，这样设置允许我们在已经训练的模型上面添加更多的估计器。</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">est</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">warm_start</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># set warm_start and new nr of trees</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">est</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span> <span class="c1"># fit additional 100 trees to est</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">est</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>    
+<span class="go">3.84...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gradient-boosting-tree-size">
+<span id="id25"></span><h3>1.11.4.4. 控制树的大小<a class="headerlink" href="#gradient-boosting-tree-size" title="Permalink to this headline">¶</a></h3>
+<p>回归树基学习器的大小定义了可以被梯度提升模型捕捉到的变量（即特征）相互作用（即多个特征共同对预测产生影响）的程度。
+通常一棵深度为 <code class="docutils literal notranslate"><span class="pre">h</span></code> 的树能捕获到秩为  <code class="docutils literal notranslate"><span class="pre">h</span></code> 的相互作用。这里有两种控制单棵回归树大小的方法。</p>
+<p>如果你指定 <code class="docutils literal notranslate"><span class="pre">max_depth=h</span></code> ，那么将会产生一个深度为 <code class="docutils literal notranslate"><span class="pre">h</span></code> 的完全二叉树。这棵树将会有（至多） <code class="docutils literal notranslate"><span class="pre">2**h</span></code> 个叶子节点和 <code class="docutils literal notranslate"><span class="pre">2**h</span> <span class="pre">-</span> <span class="pre">1</span></code> 个切分节点。</p>
+<p>另外，你能通过参数 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span></code> 指定叶子节点的数量来控制树的大小。在这种情况下，树将会使用最优优先搜索来生成，这种搜索方式是通过每次选取对不纯度提升最大的节点来展开。一棵 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes=k</span></code> 的树拥有 <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">-</span> <span class="pre">1</span></code> 个切分节点，因此可以模拟秩最高达到 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span> <span class="pre">-</span> <span class="pre">1</span></code> 的相互作用（即 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span> <span class="pre">-</span> <span class="pre">1</span></code> 个特征共同决定预测值）。</p>
+<p>我们发现 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes=k</span></code> 可以给出与 <code class="docutils literal notranslate"><span class="pre">max_depth=k-1</span></code> 品质相当的结果，但是其训练速度明显更快，同时也会以多一点的训练误差作为代价。参数 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span></code> 对应于文章 <a class="reference internal" href="#f2001" id="id26">[F2001]</a> 中梯度提升章节中的变量 <code class="docutils literal notranslate"><span class="pre">J</span></code> ，同时与 R 语言的 gbm 包的参数 <code class="docutils literal notranslate"><span class="pre">interaction.depth</span></code> 相关，两者间的关系是 <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span> <span class="pre">==</span> <span class="pre">interaction.depth</span> <span class="pre">+</span> <span class="pre">1</span></code> 。</p>
+</div>
+<div class="section" id="mathematical-formulation">
+<h3>1.11.4.5. Mathematical formulation（数学公式）<a class="headerlink" href="#mathematical-formulation" title="Permalink to this headline">¶</a></h3>
+<p>GBRT 可以认为是以下形式的可加模型:</p>
+<blockquote>
+<div><div class="math">
+<p><span class="math">F(x) = \sum_{m=1}^{M} \gamma_m h_m(x)</span></p>
+</div></div></blockquote>
+<p>其中 <span class="math">h_m(x)</span> 是基本函数,在提升算法场景中它通常被称作 <em>weak learners</em> 。梯度树提升算法（Gradient Tree Boosting）使用固定大小
+的 <a class="reference internal" href="tree.html#tree"><span class="std std-ref">decision trees</span></a> 作为弱分类器,决策树本身拥有的一些特性使它能够在提升过程中变得有价值,
+即处理混合类型数据以及构建具有复杂功能模型的能力.</p>
+<p>与其他提升算法类似， GBRT 利用前向分步算法思想构建加法模型:</p>
+<blockquote>
+<div><div class="math">
+<p><span class="math">F_m(x) = F_{m-1}(x) + \gamma_m h_m(x)</span></p>
+</div></div></blockquote>
+<p>在每一个阶段中，基于当前模型 <span class="math">F_{m-1}</span> 和拟合函数 <span class="math">F_{m-1}(x_i)</span> 选择合适的决策树函数 <span class="math">h_m(x)</span> ,从而最小化损失函数 <span class="math">L</span> 。</p>
+<blockquote>
+<div><div class="math">
+<p><span class="math">F_m(x) = F_{m-1}(x) + \arg\min_{h} \sum_{i=1}^{n} L(y_i,
+F_{m-1}(x_i) - h(x))</span></p>
+</div></div></blockquote>
+<p>初始模型 <span class="math">F_{0}</span> 是问题的具体,对于最小二乘回归,通常选择目标值的平均值.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">初始化模型也能够通过 <code class="docutils literal notranslate"><span class="pre">init</span></code> 参数来指定，但传递的对象需要实现 <code class="docutils literal notranslate"><span class="pre">fit</span></code> 和 <code class="docutils literal notranslate"><span class="pre">predict</span></code> 函数。</p>
+</div>
+<p>梯度提升（Gradient Boosting）尝试通过最速下降法以数字方式解决这个最小化问题.最速下降方向是在当前模型 <span class="math">F_{m-1}</span> 下的损失函数的负梯度方向，其中模型 <span class="math">F_{m-1}</span> 可以计算任何可微损失函数:</p>
+<blockquote>
+<div><div class="math">
+<p><span class="math">F_m(x) = F_{m-1}(x) + \gamma_m \sum_{i=1}^{n} \nabla_F L(y_i,
+F_{m-1}(x_i))</span></p>
+</div></div></blockquote>
+<p>其中步长 <span class="math">\gamma_m</span> 通过如下方式线性搜索获得:</p>
+<blockquote>
+<div><div class="math">
+<p><span class="math">\gamma_m = \arg\min_{\gamma} \sum_{i=1}^{n} L(y_i, F_{m-1}(x_i)
+- \gamma \frac{\partial L(y_i, F_{m-1}(x_i))}{\partial F_{m-1}(x_i)})</span></p>
+</div></div></blockquote>
+<p>该算法处理分类和回归问题不同之处在于具体损失函数的使用。</p>
+<div class="section" id="loss-functions">
+<span id="gradient-boosting-loss"></span><h4>1.11.4.5.1. Loss Functions（损失函数）<a class="headerlink" href="#loss-functions" title="Permalink to this headline">¶</a></h4>
+<p>以下是目前支持的损失函数,具体损失函数可以通过参数 <code class="docutils literal notranslate"><span class="pre">loss</span></code> 指定:</p>
+<blockquote>
+<div><ul class="simple">
+<li>回归 (Regression)<ul>
+<li>Least squares ( <code class="docutils literal notranslate"><span class="pre">'ls'</span></code> ): 由于其优越的计算性能,该损失函数成为回归算法中的自然选择。
+初始模型 （校对者注：即损失函数的初始值，下同） 通过目标值的均值给出。</li>
+<li>Least absolute deviation ( <code class="docutils literal notranslate"><span class="pre">'lad'</span></code> ): 回归中具有鲁棒性的损失函数,初始模型通过目
+标值的中值给出。</li>
+<li>Huber ( <code class="docutils literal notranslate"><span class="pre">'huber'</span></code> ): 回归中另一个具有鲁棒性的损失函数,它是最小二乘和最小绝对偏差两者的结合.
+其利用 <code class="docutils literal notranslate"><span class="pre">alpha</span></code> 来控制模型对于异常点的敏感度(详细介绍请参考 <a class="reference internal" href="#f2001" id="id27">[F2001]</a>).</li>
+<li>Quantile ( <code class="docutils literal notranslate"><span class="pre">'quantile'</span></code> ): 分位数回归损失函数.用 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">alpha</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> 来指定分位数这个损
+失函数可以用来产生预测间隔。（详见 <a class="reference internal" href="../auto_examples/ensemble/plot_gradient_boosting_quantile.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-quantile-py"><span class="std std-ref">Prediction Intervals for Gradient Boosting Regression</span></a> ）。</li>
+</ul>
+</li>
+<li>分类 (Classification)<ul>
+<li>Binomial deviance (<code class="docutils literal notranslate"><span class="pre">'deviance'</span></code>): 对于二分类问题(提供概率估计)即负的二项 log 似然损失函数。模型以 log 的比值比来初始化。</li>
+<li>Multinomial deviance (<code class="docutils literal notranslate"><span class="pre">'deviance'</span></code>): 对于多分类问题的负的多项log似然损失函数具有 <code class="docutils literal notranslate"><span class="pre">n_classes</span></code> 个互斥的类。提供概率估计。
+初始模型由每个类的先验概率给出.在每一次迭代中 <code class="docutils literal notranslate"><span class="pre">n_classes</span></code> 回归树被构建,这使得 GBRT 在处理多类别数据集时相当低效。</li>
+<li>Exponential loss (<code class="docutils literal notranslate"><span class="pre">'exponential'</span></code>): 与 <a class="reference internal" href="generated/sklearn.ensemble.AdaBoostClassifier.html#sklearn.ensemble.AdaBoostClassifier" title="sklearn.ensemble.AdaBoostClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdaBoostClassifier</span></code></a> 具有相同的损失函数。与 <code class="docutils literal notranslate"><span class="pre">'deviance'</span></code> 相比，对被错误标记的样本的鲁棒性较差，仅用于在二分类问题。</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="regularization">
+<h3>1.11.4.6. Regularization（正则化）<a class="headerlink" href="#regularization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="shrinkage">
+<span id="gradient-boosting-shrinkage"></span><h4>1.11.4.6.1. 收缩率 (Shrinkage)<a class="headerlink" href="#shrinkage" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="#f2001" id="id28">[F2001]</a> 提出一个简单的正则化策略,通过一个因子 <span class="math">\nu</span> 来衡量每个弱分类器对于最终结果的贡献:</p>
+<div class="math">
+<p><span class="math">F_m(x) = F_{m-1}(x) + \nu \gamma_m h_m(x)</span></p>
+</div><p>参数 <span class="math">\nu</span> 由于它可以控制梯度下降的步长, 因此也叫作 <strong>learning rate</strong> ，它可以通过 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 参数来设置.</p>
+<p>在训练一定数量的弱分类器时,参数 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 和参数 <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> 之间有很强的制约关系。
+较小的 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 需要大量的弱分类器才能维持训练误差的稳定。经验表明数值较小的 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>
+将会得到更好的测试误差。 <a class="reference internal" href="#htf2009" id="id29">[HTF2009]</a> 推荐把 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 设置为一个较小的常数
+(例如: <code class="docutils literal notranslate"><span class="pre">learning_rate</span> <span class="pre">&lt;=</span> <span class="pre">0.1</span></code> )同时通过提前停止策略来选择合适的 <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> .
+有关 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 和 <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> 更详细的讨论可以参考 <a class="reference internal" href="#r2007" id="id30">[R2007]</a>.</p>
+</div>
+<div class="section" id="subsampling">
+<h4>1.11.4.6.2. 子采样 (Subsampling)<a class="headerlink" href="#subsampling" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference internal" href="#f1999" id="id31">[F1999]</a> 提出了随机梯度提升,这种方法将梯度提升（gradient boosting）和 bootstrap averaging(bagging) 相结合。在每次迭代中,基分类器是通过抽取所有可利用训练集中一小部分的 <code class="docutils literal notranslate"><span class="pre">subsample</span></code> 训练得到的子样本采用无放回的方式采样。 <code class="docutils literal notranslate"><span class="pre">subsample</span></code> 参数的值一般设置为 0.5 。</p>
+<p>下图表明了收缩与否和子采样对于模型拟合好坏的影响。我们可以明显看到指定收缩率比没有收缩拥有更好的表现。而将子采样和收缩率相结合能进一步的提高模型的准确率。相反，使用子采样而不使用收缩的结果十分糟糕。</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/ensemble/plot_gradient_boosting_regularization.html"><img alt="modules/../auto_examples/ensemble/images/sphx_glr_plot_gradient_boosting_regularization_001.png" src="modules/../auto_examples/ensemble/images/sphx_glr_plot_gradient_boosting_regularization_001.png" /></a>
+</div>
+<p>另一个减少方差的策略是特征子采样,这种方法类似于 <a class="reference internal" href="generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> 中的随机分割。子采样的特征数可以通过参数 <code class="docutils literal notranslate"><span class="pre">max_features</span></code> 来控制。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">采用一个较小的 <code class="docutils literal notranslate"><span class="pre">max_features</span></code> 值能大大缩减模型的训练时间。</p>
+</div>
+<p>随机梯度提升允许计算测试偏差的袋外估计值（Out-of-bag），方法是计算那些不在自助采样之内的样本偏差的改进。这个改进保存在属性 <code class="xref py py-attr docutils literal notranslate"><span class="pre">oob_improvement_</span></code> 中 <code class="docutils literal notranslate"><span class="pre">oob_improvement_[i]</span></code> 如果将第 i 步添加到当前预测中，则可以改善 OOB 样本的损失。袋外估计可以使用在模型选择中，例如决定最优迭代次数。 OOB 估计通常都很悲观,因此我们推荐使用交叉验证来代替它，而当交叉验证太耗时时我们就只能使用 OOB 了。</p>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_gradient_boosting_regularization.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-regularization-py"><span class="std std-ref">Gradient Boosting regularization</span></a></li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_gradient_boosting_oob.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-oob-py"><span class="std std-ref">Gradient Boosting Out-of-Bag estimates</span></a></li>
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_ensemble_oob.html#sphx-glr-auto-examples-ensemble-plot-ensemble-oob-py"><span class="std std-ref">OOB Errors for Random Forests</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="interpretation">
+<h3>1.11.4.7. Interpretation（解释性）<a class="headerlink" href="#interpretation" title="Permalink to this headline">¶</a></h3>
+<p>通过简单地可视化树结构可以很容易地解释单个决策树,然而对于梯度提升模型来说,一般拥有数百棵/种回归树，将每一棵树都可视化来解释整个模型是很困难的。幸运的是，有很多关于总结和解释梯度提升模型的技术。</p>
+<div class="section" id="feature-importance">
+<h4>1.11.4.7.1. Feature importance（特征重要性）<a class="headerlink" href="#feature-importance" title="Permalink to this headline">¶</a></h4>
+<p>通常情况下每个特征对于预测目标的影响是不同的.在很多情形下大多数特征和预测结果是无关的。当解释一个模型时，第一个问题通常是：这些重要的特征是什么？他们如何在预测目标方面产生积极的影响的？</p>
+<p>单个决策树本质上是通过选择最佳切分点来进行特征选择.这个信息可以用来评定每个特征的重要性。基本思想是：在树的分割点中使用的特征越频繁，特征越重要。 这个特征重要性的概念可以通过简单地平均每棵树的特征重要性来扩展到决策树集合。（详见 <a class="reference internal" href="#random-forest-feature-importance"><span class="std std-ref">特征重要性评估</span></a> ）。</p>
+<p>对于一个训练好的梯度提升模型，其特征重要性分数可以通过属性 <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> 查看:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_hastie_10_2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">GradientBoostingClassifier</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_hastie_10_2</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">feature_importances_</span>  
+<span class="go">array([ 0.11,  0.1 ,  0.11,  ...</span>
+</pre></div>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_gradient_boosting_regression.html#sphx-glr-auto-examples-ensemble-plot-gradient-boosting-regression-py"><span class="std std-ref">Gradient Boosting regression</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="partial-dependence">
+<span id="id32"></span><h4>1.11.4.7.2. Partial dependence（部分依赖）<a class="headerlink" href="#partial-dependence" title="Permalink to this headline">¶</a></h4>
+<p>部分依赖图（PDP）展示了目标响应和一系列目标特征的依赖关系，同时边缘化了其他所有特征值（候选特征）。
+直觉上，我们可以将部分依赖解释为作为目标特征函数 <a class="footnote-reference" href="#id36" id="id33">[2]</a> 的预期目标响应 <a class="footnote-reference" href="#id35" id="id34">[1]</a> 。</p>
+<p>由于人类感知能力的限制，目标特征的设置必须小一点(通常是1到2)，因此目标特征通常在最重要的特征中选择。</p>
+<p>下图展示了加州住房数据集的四个单向和一个双向部分依赖图:</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/ensemble/plot_partial_dependence.html"><img alt="modules/../auto_examples/ensemble/images/sphx_glr_plot_partial_dependence_001.png" src="modules/../auto_examples/ensemble/images/sphx_glr_plot_partial_dependence_001.png" /></a>
+</div>
+<p>单向 PDPs 告诉我们目标响应和目标特征的相互影响(例如：线性或者非线性)。上图中的左上图展示了一个地区的中等收入对中等房价的影响。我们可以清楚的看到两者之间是线性相关的。</p>
+<p>具有两个目标特征的 PDPs 显示这两个特征之间的相互影响。例如：上图中两个变量的 PDP 展示了房价中位数与房屋年龄和每户平均入住人数之间的依赖关系。我们能清楚的看到这两个特征之间的影响：对于每户入住均值而言,当其值大于 2 时，房价与房屋年龄几乎是相对独立的，而其值小于 2 的时，房价对房屋年龄的依赖性就会很强。</p>
+<p>模型 <code class="xref py py-mod docutils literal notranslate"><span class="pre">partial_dependence</span></code> 提供了一个便捷的函数 <a class="reference internal" href="generated/sklearn.ensemble.partial_dependence.plot_partial_dependence.html#sklearn.ensemble.partial_dependence.plot_partial_dependence" title="sklearn.ensemble.partial_dependence.plot_partial_dependence"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_partial_dependence</span></code></a> 来产生单向或双向部分依赖图。在下图的例子中我们展示如何创建一个部分依赖的网格图：特征值介于 <code class="docutils literal notranslate"><span class="pre">0</span></code> 和 <code class="docutils literal notranslate"><span class="pre">1</span></code> 的两个单向依赖 PDPs 和一个在两个特征间的双向 PDPs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_hastie_10_2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">GradientBoostingClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble.partial_dependence</span> <span class="k">import</span> <span class="n">plot_partial_dependence</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_hastie_10_2</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plot_partial_dependence</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span> 
+</pre></div>
+</div>
+<p>对于多类别的模型，你需要通过 <code class="docutils literal notranslate"><span class="pre">label</span></code> 参数设置类别标签来创建 PDPs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_iris</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mc_clf</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plot_partial_dependence</span><span class="p">(</span><span class="n">mc_clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+</pre></div>
+</div>
+<p>如果你需要部分依赖函数的原始值而不是图，你可以调用 <a class="reference internal" href="generated/sklearn.ensemble.partial_dependence.partial_dependence.html#sklearn.ensemble.partial_dependence.partial_dependence" title="sklearn.ensemble.partial_dependence.partial_dependence"><code class="xref py py-func docutils literal notranslate"><span class="pre">partial_dependence</span></code></a> 函数:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble.partial_dependence</span> <span class="k">import</span> <span class="n">partial_dependence</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdp</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">partial_dependence</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdp</span>  
+<span class="go">array([[ 2.46643157,  2.46643157, ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span>  
+<span class="go">[array([-1.62497054, -1.59201391, ...</span>
+</pre></div>
+</div>
+<p>该函数允许通过 <code class="docutils literal notranslate"><span class="pre">grid</span></code> 参数指定应该被评估的部分依赖函数的的目标特征值或可以十分便利地通过设置 <code class="docutils literal notranslate"><span class="pre">X</span></code> 参数从而在训练数据中自动创建 <code class="docutils literal notranslate"><span class="pre">grid</span></code> 。如果 <code class="docutils literal notranslate"><span class="pre">X</span></code> 被给出，函数返回的 <code class="docutils literal notranslate"><span class="pre">axes</span></code> 为每个目标特征提供轴。</p>
+<p>对于 <code class="docutils literal notranslate"><span class="pre">grid</span></code> 中的每一个 ‘目标’ 特征值，部分依赖函数需要边缘化一棵树中所有候选特征的可能值的预测。
+在决策树中，这个函数可以在不参考训练数据的情况下被高效的评估，对于每一网格点执行加权遍历:
+如果切分点包含 ‘目标’ 特征，遍历其相关的左分支或相关的右分支,否则就遍历两个分支。每一个分支将被通过进入该分支的训练样本的占比加权，
+最后，部分依赖通过所有访问的叶节点的权重的平均值给出。组合树（tree ensembles）的整体结果，需要对每棵树的结果再次平均得到。</p>
+<p class="rubric">注解 (Footnotes)</p>
+<table class="docutils footnote" frame="void" id="id35" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id34">[1]</a></td><td>对于损失函数为deviance的分类问题，其目标响应为 logit(p) 。</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id36" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id33">[2]</a></td><td>更精确的来说，这里指在产生初始化模型后，对于目标响应的期望；部分依赖图并不包括 <code class="docutils literal notranslate"><span class="pre">init</span></code> 模型。</td></tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/ensemble/plot_partial_dependence.html#sphx-glr-auto-examples-ensemble-plot-partial-dependence-py"><span class="std std-ref">Partial Dependence Plots</span></a></li>
+</ul>
+</div>
+<div class="topic">
+<p class="topic-title first">参考</p>
+<table class="docutils citation" frame="void" id="f2001" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[F2001]</td><td><em>(<a class="fn-backref" href="#id26">1</a>, <a class="fn-backref" href="#id27">2</a>, <a class="fn-backref" href="#id28">3</a>)</em> J. Friedman, “Greedy Function Approximation: A Gradient Boosting Machine”,
+The Annals of Statistics, Vol. 29, No. 5, 2001.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="f1999" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id31">[F1999]</a></td><td><ol class="first last upperalpha simple" start="10">
+<li>Friedman, “Stochastic Gradient Boosting”, 1999</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="htf2009" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id29">[HTF2009]</a></td><td><ol class="first last upperalpha simple" start="20">
+<li>Hastie, R. Tibshirani and J. Friedman, “Elements of Statistical Learning Ed. 2”, Springer, 2009.</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r2007" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id30">[R2007]</a></td><td><ol class="first last upperalpha simple" start="7">
+<li>Ridgeway, “Generalized Boosted Models: A guide to the gbm package”, 2007</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="voting-classifier">
+<span id="id37"></span><h2>1.11.5. Voting Classifier（投票分类器）<a class="headerlink" href="#voting-classifier" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">VotingClassifier</span></code> （投票分类器）的原理是结合了多个不同的机器学习分类器,并且采用多数表决（majority vote）（硬投票） 或者平均预测概率（软投票）的方式来预测分类标签。
+这样的分类器可以用于一组同样表现良好的模型,以便平衡它们各自的弱点。</p>
+<div class="section" id="id38">
+<h3>1.11.5.1. 多数类标签 (又称为 多数/硬投票)<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
+<p>在多数投票中，对于每个特定样本的预测类别标签是所有单独分类器预测的类别标签中票数占据多数（模式）的类别标签。</p>
+<p>例如，如果给定样本的预测是</p>
+<ul class="simple">
+<li>classifier 1 -&gt; class 1</li>
+<li>classifier 2 -&gt; class 1</li>
+<li>classifier 3 -&gt; class 2</li>
+</ul>
+<p>类别 1 占据多数,通过 <code class="docutils literal notranslate"><span class="pre">voting='hard'</span></code> 参数设置投票分类器为多数表决方式，会得到该样本的预测结果是类别 1 。</p>
+<p>在平局的情况下,投票分类器（VotingClassifier）将根据升序排序顺序选择类标签。
+例如，场景如下:</p>
+<ul class="simple">
+<li>classifier 1 -&gt; class 2</li>
+<li>classifier 2 -&gt; class 1</li>
+</ul>
+<p>这种情况下， class 1 将会被指定为该样本的类标签。</p>
+<div class="section" id="id39">
+<h4>1.11.5.1.1. 用法<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h4>
+<p>以下示例显示如何训练多数规则分类器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">cross_val_score</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="k">import</span> <span class="n">GaussianNB</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">VotingClassifier</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clf1</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf2</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf3</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eclf</span> <span class="o">=</span> <span class="n">VotingClassifier</span><span class="p">(</span><span class="n">estimators</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">clf1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">clf2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;gnb&#39;</span><span class="p">,</span> <span class="n">clf3</span><span class="p">)],</span> <span class="n">voting</span><span class="o">=</span><span class="s1">&#39;hard&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">clf</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">clf1</span><span class="p">,</span> <span class="n">clf2</span><span class="p">,</span> <span class="n">clf3</span><span class="p">,</span> <span class="n">eclf</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Logistic Regression&#39;</span><span class="p">,</span> <span class="s1">&#39;Random Forest&#39;</span><span class="p">,</span> <span class="s1">&#39;naive Bayes&#39;</span><span class="p">,</span> <span class="s1">&#39;Ensemble&#39;</span><span class="p">]):</span>
+<span class="gp">... </span>    <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy: </span><span class="si">%0.2f</span><span class="s2"> (+/- </span><span class="si">%0.2f</span><span class="s2">) [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">scores</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span> <span class="n">label</span><span class="p">))</span>
+<span class="go">Accuracy: 0.90 (+/- 0.05) [Logistic Regression]</span>
+<span class="go">Accuracy: 0.93 (+/- 0.05) [Random Forest]</span>
+<span class="go">Accuracy: 0.91 (+/- 0.04) [naive Bayes]</span>
+<span class="go">Accuracy: 0.95 (+/- 0.05) [Ensemble]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id40">
+<h3>1.11.5.2. 加权平均概率 （软投票）<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h3>
+<p>与多数投票（硬投票）相比，软投票将类别标签返回为预测概率之和的 argmax 。</p>
+<p>具体的权重可以通过权重参数 <code class="docutils literal notranslate"><span class="pre">weights</span></code> 分配给每个分类器。当提供权重参数 <code class="docutils literal notranslate"><span class="pre">weights</span></code> 时，收集每个分类器的预测分类概率，
+乘以分类器权重并取平均值。然后将具有最高平均概率的类别标签确定为最终类别标签。</p>
+<p>为了用一个简单的例子来说明这一点，假设我们有 3 个分类器和一个 3 类分类问题，我们给所有分类器赋予相等的权重：w1 = 1,w2 = 1,w3 = 1 。</p>
+<p>样本的加权平均概率计算如下：</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="21%" />
+<col width="21%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">分类器</th>
+<th class="head">类别 1</th>
+<th class="head">类别 2</th>
+<th class="head">类别 3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>分类器 1</td>
+<td>w1 * 0.2</td>
+<td>w1 * 0.5</td>
+<td>w1 * 0.3</td>
+</tr>
+<tr class="row-odd"><td>分类器 2</td>
+<td>w2 * 0.6</td>
+<td>w2 * 0.3</td>
+<td>w2 * 0.1</td>
+</tr>
+<tr class="row-even"><td>分类器 3</td>
+<td>w3 * 0.3</td>
+<td>w3 * 0.4</td>
+<td>w3 * 0.3</td>
+</tr>
+<tr class="row-odd"><td>加权平均的结果</td>
+<td>0.37</td>
+<td>0.4</td>
+<td>0.23</td>
+</tr>
+</tbody>
+</table>
+<p>这里可以看出，预测的类标签是 2，因为它具有最大的平均概率.</p>
+<p>下边的示例程序说明了当软投票分类器（soft VotingClassifier）是基于线性支持向量机（linear SVM）、决策树（Decision Tree）、K 近邻（K-nearest）分类器时，决策域可能的变化情况:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">VotingClassifier</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Loading some example data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Training classifiers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf1</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf2</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf3</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eclf</span> <span class="o">=</span> <span class="n">VotingClassifier</span><span class="p">(</span><span class="n">estimators</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;dt&#39;</span><span class="p">,</span> <span class="n">clf1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;knn&#39;</span><span class="p">,</span> <span class="n">clf2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;svc&#39;</span><span class="p">,</span> <span class="n">clf3</span><span class="p">)],</span> <span class="n">voting</span><span class="o">=</span><span class="s1">&#39;soft&#39;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clf1</span> <span class="o">=</span> <span class="n">clf1</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf2</span> <span class="o">=</span> <span class="n">clf2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf3</span> <span class="o">=</span> <span class="n">clf3</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eclf</span> <span class="o">=</span> <span class="n">eclf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/ensemble/plot_voting_decision_regions.html"><img alt="modules/../auto_examples/ensemble/images/sphx_glr_plot_voting_decision_regions_001.png" src="modules/../auto_examples/ensemble/images/sphx_glr_plot_voting_decision_regions_001.png" /></a>
+</div>
+</div>
+<div class="section" id="votingclassifier-gridsearch">
+<h3>1.11.5.3. 投票分类器（VotingClassifier）在网格搜索（GridSearch）应用<a class="headerlink" href="#votingclassifier-gridsearch" title="Permalink to this headline">¶</a></h3>
+<p>为了调整每个估计器的超参数， <cite>VotingClassifier</cite> 也可以和 <cite>GridSearch</cite> 一起使用:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf1</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf2</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf3</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eclf</span> <span class="o">=</span> <span class="n">VotingClassifier</span><span class="p">(</span><span class="n">estimators</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">clf1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">clf2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;gnb&#39;</span><span class="p">,</span> <span class="n">clf3</span><span class="p">)],</span> <span class="n">voting</span><span class="o">=</span><span class="s1">&#39;soft&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lr__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">],</span> <span class="s1">&#39;rf__n_estimators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">200</span><span class="p">],}</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">eclf</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="id41">
+<h4>1.11.5.3.1. 用法<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h4>
+<p>为了通过预测的类别概率来预测类别标签(投票分类器中的 scikit-learn estimators 必须支持 <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> 方法):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eclf</span> <span class="o">=</span> <span class="n">VotingClassifier</span><span class="p">(</span><span class="n">estimators</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">clf1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">clf2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;gnb&#39;</span><span class="p">,</span> <span class="n">clf3</span><span class="p">)],</span> <span class="n">voting</span><span class="o">=</span><span class="s1">&#39;soft&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>可选地，也可以为单个分类器提供权重:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eclf</span> <span class="o">=</span> <span class="n">VotingClassifier</span><span class="p">(</span><span class="n">estimators</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">clf1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">clf2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;gnb&#39;</span><span class="p">,</span> <span class="n">clf3</span><span class="p">)],</span> <span class="n">voting</span><span class="o">=</span><span class="s1">&#39;soft&#39;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <!-- modules/ensemble.html -->
+    <div class="apachecn_doc_right">
+      校验者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@Dream on dreamer.</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/zehuichen123">@zehuichen123</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/JanzenLiu">@JanzenLiu</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@小瑶</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@\S^R^Y/</a><br/>
+      翻译者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@StupidStalker</a><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@文谊</a><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@t9UhoI</a><br/>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../_sources/modules/ensemble.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="tree.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="multiclass.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

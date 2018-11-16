@@ -1,0 +1,617 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>2.4. 双聚类 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.5. 分解成分中的信号（矩阵分解问题）" href="decomposition.html" />
+    <link rel="prev" title="2.3. 聚类" href="clustering.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/modules/biclustering.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../index.html">
+          <img src="../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../tutorial/index.html">教程</a></li>
+                      <li><a href="../user_guide.html">用户指南</a></li>
+                      <li><a href="classes.html">API</a></li>
+                      <li><a href="../faq.html">FAQ</a></li>
+                      <li><a href="../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../auto_examples/index.html">示例</a></li>
+              <li><a href="../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../project-role.html">项目角色</a></li>
+                      <li><a href="../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="clustering.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      2.3. 聚类
+      </span>
+          <span class="hiddenrellink">
+          2.3. 聚类
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="decomposition.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      2.5. 分解成分中的信号（矩阵分解问题）
+      </span>
+          <span class="hiddenrellink">
+          2.5. 分解成分中的信号（矩阵分解问题）
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="../unsupervised_learning.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      2. 无监督学习
+      </span>
+          <span class="hiddenrellink">
+          2. 无监督学习
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">2.4. 双聚类</a><ul>
+<li><a class="reference internal" href="#spectral-co-clustering">2.4.1. Spectral Co-Clustering</a><ul>
+<li><a class="reference internal" href="#id2">2.4.1.1. 数学公式</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spectral-biclustering">2.4.2. Spectral Biclustering</a><ul>
+<li><a class="reference internal" href="#id4">2.4.2.1. 数学表示</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#biclustering-evaluation">2.4.3. Biclustering 评测</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="biclustering">
+<span id="id1"></span><h1>2.4. 双聚类<a class="headerlink" href="#biclustering" title="Permalink to this headline">¶</a></h1>
+<p>Biclustering 可以使用
+<a class="reference internal" href="classes.html#module-sklearn.cluster.bicluster" title="sklearn.cluster.bicluster"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.cluster.bicluster</span></code></a> 模块。 Biclustering 算法对数据矩阵的行列同时进行聚类。 同时对行列进行聚类称之为
+biclusters。 每一次聚类都会通过原始数据矩阵的一些属性确定一个子矩阵。</p>
+<p>例如, 一个矩阵 <code class="docutils literal notranslate"><span class="pre">(10,</span> <span class="pre">10)</span></code> , 一个 bicluster 聚类，有三列二行，就是一个子矩阵 <code class="docutils literal notranslate"><span class="pre">(3,</span> <span class="pre">2)</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">columns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">]</span>
+<span class="go">array([[ 1,  2],</span>
+<span class="go">       [21, 22],</span>
+<span class="go">       [31, 32]])</span>
+</pre></div>
+</div>
+<p>为了可视化， 给定一个 bicluster 聚类，数据矩阵的行列可以重新分配，使得 bi-cluster 是连续的。</p>
+<p>算法在如何定义 bicluster 方面有一些不同，常见类型包括：</p>
+<ul class="simple">
+<li>不变的 values , 不变的 rows, 或者不变的 columns。</li>
+<li>异常高的或者低的值。</li>
+<li>低方差的子矩阵。</li>
+<li>相关的 rows 或者 columns。</li>
+</ul>
+<p>算法在分配给 bicluster 行列的方式不同, 会导致不同的 bicluster 结构。 当行和列分成分区时，会发生对角线或者棋盘结构。</p>
+<p>如果每一行和每一列同属于一种 bicluster ,就重新排列数据矩阵的行和列,会使得 bicluster 呈现对角线。 下面是一个例子，此结构的biclusters 具有比其他行列更高的平均值:</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/bicluster/images/sphx_glr_plot_spectral_coclustering_003.png"><img alt="modules/../auto_examples/bicluster/images/sphx_glr_plot_spectral_coclustering_003.png" src="modules/../auto_examples/bicluster/images/sphx_glr_plot_spectral_coclustering_003.png" /></a>
+</div>
+<p>在棋盘结构的例子中, 每一行属于所有的列类别, 每一列属于所有的行类别。 下面是一个例子，每个 bicluster 中的值差异较小:</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/bicluster/images/sphx_glr_plot_spectral_biclustering_003.png"><img alt="modules/../auto_examples/bicluster/images/sphx_glr_plot_spectral_biclustering_003.png" src="modules/../auto_examples/bicluster/images/sphx_glr_plot_spectral_biclustering_003.png" /></a>
+</div>
+<p>在拟合模型之后， 可以在 <code class="docutils literal notranslate"><span class="pre">rows_</span></code> 和 <code class="docutils literal notranslate"><span class="pre">columns_</span></code> 属性中找到行列 cluster membership 。
+<code class="docutils literal notranslate"><span class="pre">rows_[i]</span></code> 是一个二进制的向量，
+就是属于 bicluster <code class="docutils literal notranslate"><span class="pre">i</span></code> 的一行。
+同样的, <code class="docutils literal notranslate"><span class="pre">columns_[i]</span></code> 就表示属于 bicluster <code class="docutils literal notranslate"><span class="pre">i</span></code> 的列。</p>
+<p>一些模块也有 <code class="docutils literal notranslate"><span class="pre">row_labels_</span></code> 何 <code class="docutils literal notranslate"><span class="pre">column_labels_</span></code> 属性。
+这些模块对行列进行分区, 例如对角线或者棋盘 bicluster 结构。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Biclustering 在不同的领域有很多其他名称，包括 co-clustering, two-mode clustering, two-way clustering, block
+clustering, coupled two-way clustering 等.有一些算法的名称，比如 Spectral Co-Clustering algorithm, 反应了这些备用名称。</p>
+</div>
+<div class="section" id="spectral-co-clustering">
+<span id="spectral-coclustering"></span><h2>2.4.1. Spectral Co-Clustering<a class="headerlink" href="#spectral-co-clustering" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><a class="reference internal" href="generated/sklearn.cluster.bicluster.SpectralCoclustering.html#sklearn.cluster.bicluster.SpectralCoclustering" title="sklearn.cluster.bicluster.SpectralCoclustering"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpectralCoclustering</span></code></a> 算法找到的 bicluster 的值比相应的其他行和列更高。</div></blockquote>
+<p>每一个行和列都只属于一个 bicluster, 所以重新分配行和列，使得分区连续显示对角线上的 high value:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">算法将输入的数据矩阵看做成二分图：该矩阵的行和列对应于两组顶点，每个条目对应于行和列之间的边，该算法近似的进行归一化，对图进行切割，找到更重的子图。</p>
+</div>
+<div class="section" id="id2">
+<h3>2.4.1.1. 数学公式<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>找到最优归一化剪切的近似解，可以通过图形的 Laplacian 的广义特征值分解。
+通常这意味着直接使用 Laplacian 矩阵. 如果原始数据矩阵 <span class="math">A</span> 有形状 <span class="math">m
+\times n</span>, 则对应的 bipartite 图的 Laplacian 矩阵具有形状 <span class="math">(m + n) \times (m + n)</span>。
+但是, 在这种情况直接使用 <span class="math">A</span> , 因为它更小，更有作用。</p>
+<p>输入矩阵 <span class="math">A</span> 被预处理如下:</p>
+<div class="math">
+<p><span class="math">A_n = R^{-1/2} A C^{-1/2}</span></p>
+</div><p><span class="math">R</span> 是 <span class="math">i</span> 对角线矩阵，和 <span class="math">\sum_{j} A_{ij}</span> 相同，  <span class="math">C</span> 是 <span class="math">j</span> 的对角吸纳矩阵，等同于 <span class="math">\sum_{i} A_{ij}</span>。</p>
+<p>奇异值分解, <span class="math">A_n = U \Sigma V^\top</span> , 提供了 <span class="math">A</span> 行列的分区. 左边的奇异值向量给予行分区，右边的奇异值向量给予列分区。</p>
+<p><span class="math">\ell = \lceil \log_2 k \rceil</span> 奇异值向量从第二个开始, 提供所需的分区信息。 这些用于形成矩阵 :<cite>Z</cite>:</p>
+<div class="math">
+<p><span class="math">Z = \begin{bmatrix} R^{-1/2} U \\\\
+                    C^{-1/2} V
+      \end{bmatrix}</span></p>
+</div><p><span class="math">U</span> 的列是 <span class="math">u_2, \dots, u_{\ell +1}</span>, 和 <span class="math">V</span> 相似 。</p>
+<p>然后 <span class="math">Z</span> 的 rows 通过使用 <a class="reference internal" href="clustering.html#k-means"><span class="std std-ref">k-means</span></a> 进行聚类. <code class="docutils literal notranslate"><span class="pre">n_rows</span></code> 标签提供行分区,
+剩下的 <code class="docutils literal notranslate"><span class="pre">n_columns</span></code> 标签 提供 列分区。</p>
+<div class="topic">
+<p class="topic-title first">例子:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/bicluster/plot_spectral_coclustering.html#sphx-glr-auto-examples-bicluster-plot-spectral-coclustering-py"><span class="std std-ref">A demo of the Spectral Co-Clustering algorithm</span></a>: 如何用 bicluster 数据矩阵并应用。</li>
+<li><a class="reference internal" href="../auto_examples/bicluster/plot_bicluster_newsgroups.html#sphx-glr-auto-examples-bicluster-plot-bicluster-newsgroups-py"><span class="std std-ref">Biclustering documents with the Spectral Co-clustering algorithm</span></a>:一个在 20 个新闻组数据集中发现 biclusters 的例子</li>
+</ul>
+</div>
+<div class="topic">
+<p class="topic-title first">参考文献:</p>
+<ul class="simple">
+<li>Dhillon, Inderjit S, 2001. <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.140.3011">Co-clustering documents and words using
+bipartite spectral graph partitioning</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="spectral-biclustering">
+<span id="id3"></span><h2>2.4.2. Spectral Biclustering<a class="headerlink" href="#spectral-biclustering" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><a class="reference internal" href="generated/sklearn.cluster.bicluster.SpectralBiclustering.html#sklearn.cluster.bicluster.SpectralBiclustering" title="sklearn.cluster.bicluster.SpectralBiclustering"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpectralBiclustering</span></code></a> 算法假设输入的数据矩阵具有隐藏的棋盘结构。 具有这种结构的矩阵的行列
+可能被分区，使得在笛卡尔积中的 大部分 biclusters 的 row clusters 和 column cluster 是近似恒定的。</div></blockquote>
+<p>例如，如果有两个row 分区和三个列分区，每一行属于三个 bicluster ，每一列属于两个 bicluster。</p>
+<p>这个算法划分矩阵的行和列，以至于提供一个相应的块状不变的棋盘矩阵，近似于原始矩阵。</p>
+<div class="section" id="id4">
+<h3>2.4.2.1. 数学表示<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>输入矩阵 <span class="math">A</span> 先归一化，使得棋盘模式更明显。有三种方法:</p>
+<ol class="arabic simple">
+<li><em>独立的行和列归一化</em>, as in Spectral
+Co-Clustering. 这个方法使得行和一个常数相加，列和变量相加。</li>
+<li><strong>Bistochastization</strong>: 重复行和列归一化直到收敛。该方法使得行和列都相加</li>
+</ol>
+<p>&nbsp;&nbsp;&nbsp;相同的常数。</p>
+<ol class="arabic simple" start="3">
+<li><strong>Log 归一化</strong>: 计算数据矩阵的对数 <span class="math">L =
+\log A</span>. 列就是 <span class="math">\overline{L_{i \cdot}}</span>, 行就是
+<span class="math">\overline{L_{\cdot j}}</span>, 总体上来看 <span class="math">\overline{L_{\cdot
+\cdot}}</span> of <span class="math">L</span> 被计算的. 最后矩阵通过下面的公式计算</li>
+</ol>
+<div class="math">
+<p><span class="math">K_{ij} = L_{ij} - \overline{L_{i \cdot}} - \overline{L_{\cdot
+j}} + \overline{L_{\cdot \cdot}}</span></p>
+</div><p>归一化后，首先少量的奇异值向量被计算，只是在 Spectral Co-Clustering 算法中。</p>
+<p>如果使用 log 归一化，则所有的奇异向量都是有意义的。但是, 如果是独立的归一化或双曲线化
+被使用，第一个奇异矢量, <span class="math">u_1</span> 和 <span class="math">v_1</span>。
+会被丢弃。 从现在开始,  “first” 奇异值向量与
+<span class="math">u_2 \dots u_{p+1}</span> 和 <span class="math">v_2 \dots v_{p+1}</span> 相关，除了日志归一化的情况。</p>
+<p>给定这些奇异值向量， 将他们排序，通过分段常数向量保证最佳近似。 使用一维 k-means 找到每个向量的近似值
+并使用欧几里得距离得分。 Some subset of 最好的左右奇异值向量的子集被选择。 下一步,
+数据预计到这个最佳子集的奇异向量和聚类。</p>
+<p>例如，如果 <span class="math">p</span>  奇异值向量被计算，最好按照描述找到
+<span class="math">q</span> ， 其中 <span class="math">q&lt;p</span>。
+<span class="math">U</span> 列为，the <span class="math">q</span> 最佳左奇异向量的矩阵,
+并且 <span class="math">V</span> 对于右边是类似的. 要划分行,
+将 <span class="math">A</span>  的 投影到 <span class="math">q</span> 维空间:
+<span class="math">A * V</span>。  <span class="math">m</span> 行 <span class="math">m \times q</span>
+矩阵的行作为采样和使用 k-means 的聚类处理产生行标签。
+类似地，将列投影到 <span class="math">A^{\top} * U</span> ，并且对
+<span class="math">n \times q</span> 矩阵进行聚类得到列标签。</p>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../auto_examples/bicluster/plot_spectral_biclustering.html#sphx-glr-auto-examples-bicluster-plot-spectral-biclustering-py"><span class="std std-ref">A demo of the Spectral Biclustering algorithm</span></a>: 一个简单的例子
+显示如何生成棋盘矩阵和 bicluster</li>
+</ul>
+</div>
+<p>.</p>
+<div class="topic">
+<p class="topic-title first">参考文献:</p>
+<ul class="simple">
+<li>Kluger, Yuval, et. al., 2003. <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.135.1608">Spectral biclustering of microarray
+data: coclustering genes and conditions</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="biclustering-evaluation">
+<span id="id5"></span><h2>2.4.3. Biclustering 评测<a class="headerlink" href="#biclustering-evaluation" title="Permalink to this headline">¶</a></h2>
+<p>有两种评估双组分结果的方法：内部和外部。
+诸如群集稳定性等内部措施只依赖于数据和结果本身。
+目前在scikit-learn中没有内部的二集群措施。外部措施是指外部信息来源，例如真正的解决方案。
+当使用真实数据时，真正的解决方案通常是未知的，但是，由于真正的解决方案是已知的，因此人造数据的双重分析可能对于评估算法非常有用。</p>
+<p>为了将一组已发现的双组分与一组真正的双组分进行比较，
+需要两个相似性度量：单个双色团体的相似性度量，以及将这些个体相似度结合到总分中的方法。</p>
+<p>为了比较单个双核，已经采用了几种措施。现在，只有Jaccard索引被实现：</p>
+<div class="math">
+<p><span class="math">J(A, B) = \frac{|A \cap B|}{|A| + |B| - |A \cap B|}</span></p>
+</div><dl class="docutils">
+<dt><span class="math">A</span> 和 <span class="math">B</span> 是 biclusters, <span class="math">|A \cap B|</span> 是交叉点的元素的数量。</dt>
+<dd>Jaccard 索引 达到最小值0，当 biclusters 不重叠的时候，并且当他们相同干的时候，最大值为1。</dd>
+</dl>
+<p>有些方法已经开发出来，用来比较两个 biclusters 的数据集。
+从现在开始 之后 <a class="reference internal" href="generated/sklearn.metrics.consensus_score.html#sklearn.metrics.consensus_score" title="sklearn.metrics.consensus_score"><code class="xref py py-func docutils literal notranslate"><span class="pre">consensus_score</span></code></a> (Hochreiter et. al., 2010) 是可以用:</p>
+<ol class="arabic simple">
+<li>使用 Jaccard 索引或类似措施，计算 biclusters 的 bicluster 相似性。</li>
+<li>以一对一的方式将 bicluster 分从一组分配给另一组，以最大化其相似性的总和。该步骤使用匈牙利算法执行。</li>
+<li>相似性的最终总和除以较大集合的大小。</li>
+</ol>
+<p>最小共识得分为0，发生在所有 biclusters 完全不相似时。当两组 biclusters 相同时，最大分数为1。</p>
+<div class="topic">
+<p class="topic-title first">参考文献:</p>
+<ul class="simple">
+<li>Hochreiter, Bodenhofer, et. al., 2010. <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2881408/">FABIA: factor analysis
+for bicluster acquisition</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+    <!-- modules/biclustering.html -->
+    <div class="apachecn_doc_right">
+      校验者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@udy</a><br/>
+      翻译者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@程威</a><br/>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../_sources/modules/biclustering.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="clustering.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="decomposition.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

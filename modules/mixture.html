@@ -1,0 +1,628 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>2.1. 高斯混合模型 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.2. 流形学习" href="manifold.html" />
+    <link rel="prev" title="2. 无监督学习" href="../unsupervised_learning.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/modules/mixture.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../index.html">
+          <img src="../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../tutorial/index.html">教程</a></li>
+                      <li><a href="../user_guide.html">用户指南</a></li>
+                      <li><a href="classes.html">API</a></li>
+                      <li><a href="../faq.html">FAQ</a></li>
+                      <li><a href="../developers/contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../auto_examples/index.html">示例</a></li>
+              <li><a href="../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../project-role.html">项目角色</a></li>
+                      <li><a href="../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="../unsupervised_learning.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      2. 无监督学习
+      </span>
+          <span class="hiddenrellink">
+          2. 无监督学习
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="manifold.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      2.2. 流形学习
+      </span>
+          <span class="hiddenrellink">
+          2.2. 流形学习
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="../unsupervised_learning.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      2. 无监督学习
+      </span>
+          <span class="hiddenrellink">
+          2. 无监督学习
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">2.1. 高斯混合模型</a><ul>
+<li><a class="reference internal" href="#id2">2.1.1. 高斯混合</a><ul>
+<li><a class="reference internal" href="#gaussianmixture">2.1.1.1. 优缺点 <code class="docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a><ul>
+<li><a class="reference internal" href="#id3">2.1.1.1.1. 优点</a></li>
+<li><a class="reference internal" href="#id4">2.1.1.1.2. 缺点</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id5">2.1.1.2. 选择经典高斯混合模型中分量的个数</a></li>
+<li><a class="reference internal" href="#em">2.1.1.3. 估计算法期望最大化（EM）</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bgmm">2.1.2. 变分贝叶斯高斯混合</a><ul>
+<li><a class="reference internal" href="#variational-inference">2.1.2.1. 估计算法: 变分推断（variational inference）</a><ul>
+<li><a class="reference internal" href="#id8">2.1.2.1.1. 优点</a></li>
+<li><a class="reference internal" href="#id9">2.1.2.1.2. 缺点</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-dirichlet-process">2.1.2.2. The Dirichlet Process（狄利克雷过程）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gmm">
+<span id="mixture"></span><span id="id1"></span><h1>2.1. 高斯混合模型<a class="headerlink" href="#gmm" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">sklearn.mixture</span></code> 是一个应用高斯混合模型进行非监督学习的包，支持 diagonal，spherical，tied，full 四种协方差矩阵
+（注：diagonal 指每个分量有各自不同对角协方差矩阵， spherical 指每个分量有各自不同的简单协方差矩阵， tied 指所有分量有相同的标准协方差矩阵， full 指每个分量有各自不同的标准协方差矩阵），它对数据进行抽样，并且根据数据估计模型。同时包也提供了相关支持，来帮助用户决定合适的分量数（分量个数）。
+<em>（译注：在高斯混合模型中，我们将每一个高斯分布称为一个分量，即 component ）</em></p>
+<blockquote>
+<div><div class="figure align-center" id="id10">
+<a class="reference external image-reference" href="../auto_examples/mixture/plot_gmm_pdf.html"><img alt="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_pdf_001.png" src="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_pdf_001.png" /></a>
+<p class="caption"><span class="caption-text"><strong>二分量高斯混合模型:</strong> <em>数据点，以及模型的等概率线。</em></span></p>
+</div>
+</div></blockquote>
+<p>高斯混合模型是一个假设所有的数据点都是生成于一个混合的有限数量的并且未知参数的高斯分布的概率模型。
+我们可以将混合模型看作是 k-means 聚类算法的推广，它利用了关于数据的协方差结构以及潜在高斯中心的信息。</p>
+<p>对应不同的估算策略，Scikit-learn 实现了不同的类来估算高斯混合模型。
+详细描述如下：</p>
+<div class="section" id="id2">
+<h2>2.1.1. 高斯混合<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="sklearn.mixture.GaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> 对象实现了用来拟合高斯混合模型的
+<a class="reference internal" href="#expectation-maximization"><span class="std std-ref">期望最大化</span></a> (EM) 算法。它还可以为多变量模型绘制置信区间，同时计算 BIC（Bayesian Information Criterion，贝叶斯信息准则）来评估数据中聚类的数量。
+<a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture.fit" title="sklearn.mixture.GaussianMixture.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">GaussianMixture.fit</span></code></a> 提供了从训练数据中学习高斯混合模型的方法。</div></blockquote>
+<p>给定测试数据，通过使用 <a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture.predict" title="sklearn.mixture.GaussianMixture.predict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">GaussianMixture.predict</span></code></a> 方法，可以为每个样本分配最有可能对应的高斯分布。</p>
+<p><a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="sklearn.mixture.GaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> 方法中自带了不同的选项来约束不同估类的协方差：spherical，diagonal，tied 或 full 协方差。</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/mixture/plot_gmm_covariances.html"><img alt="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_covariances_001.png" src="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_covariances_001.png" /></a>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li>一个利用高斯混合模型在鸢尾花卉数据集（IRIS 数据集）上做聚类的协方差实例，请查阅 <a class="reference internal" href="../auto_examples/mixture/plot_gmm_covariances.html#sphx-glr-auto-examples-mixture-plot-gmm-covariances-py"><span class="std std-ref">GMM covariances</span></a></li>
+<li>一个绘制密度估计的例子，请查阅 <a class="reference internal" href="../auto_examples/mixture/plot_gmm_pdf.html#sphx-glr-auto-examples-mixture-plot-gmm-pdf-py"><span class="std std-ref">Density Estimation for a Gaussian mixture</span></a></li>
+</ul>
+</div>
+<div class="section" id="gaussianmixture">
+<h3>2.1.1.1. 优缺点 <a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="sklearn.mixture.GaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a><a class="headerlink" href="#gaussianmixture" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h4>2.1.1.1.1. 优点<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">速度:</th><td class="field-body">是混合模型学习算法中最快的算法。</td>
+</tr>
+<tr class="field-even field"><th class="field-name">无偏差性:</th><td class="field-body">这个算法仅仅只是最大化可能性，并不会使均值偏向于0，或是使聚类大小偏向于可能适用或者可能不适用的特殊结构。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id4">
+<h4>2.1.1.1.2. 缺点<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">奇异性:</th><td class="field-body">当每个混合模型没有足够多的点时，估算协方差变得困难起来，同时算法会发散并且找具有无穷大似然函数值的解，除非人为地对协方差进行正则化。</td>
+</tr>
+<tr class="field-even field"><th class="field-name">分量的数量:</th><td class="field-body">这个算法将会总是用所有它能用的分量，所以在没有外部线索的情况下需要留存数据或者用信息理论标准来决定用多少分量。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>2.1.1.2. 选择经典高斯混合模型中分量的个数<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>一种高效的方法是利用 BIC（贝叶斯信息准则）来选择高斯混合的分量数。
+理论上，它仅当在近似状态下可以恢复正确的分量数（即如果有大量数据可用，并且假设这些数据实际上是一个混合高斯模型独立同分布生成的）。注意：使用 <a class="reference internal" href="#bgmm"><span class="std std-ref">变分贝叶斯高斯混合</span></a> 可以避免高斯混合模型中分量数的选择。</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/mixture/plot_gmm_selection.html"><img alt="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_selection_001.png" src="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_selection_001.png" /></a>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<ul class="simple">
+<li>一个用典型的高斯混合进行的模型选择的例子，请查阅 <a class="reference internal" href="../auto_examples/mixture/plot_gmm_selection.html#sphx-glr-auto-examples-mixture-plot-gmm-selection-py"><span class="std std-ref">Gaussian Mixture Model Selection</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="em">
+<span id="expectation-maximization"></span><h3>2.1.1.3. 估计算法期望最大化（EM）<a class="headerlink" href="#em" title="Permalink to this headline">¶</a></h3>
+<p>在从无标记的数据中应用高斯混合模型主要的困难在于：通常不知道哪个点来自哪个潜在的分量
+（如果可以获取到这些信息，就可以很容易通过相应的数据点，拟合每个独立的高斯分布）。
+<a class="reference external" href="https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm">期望最大化（Expectation-maximization，EM）</a> 是一个理论完善的统计算法，其通过迭代方式来解决这个问题。首先，假设一个随机分量
+（随机地选择一个中心点，可以用 k-means 算法得到，或者甚至就直接地随便在原点周围选取），并且为每个点计算由模型的每个分量生成的概率。然后，调整模型参数以最大化模型生成这些参数的可能性。重复这个过程，该算法保证过程中的参数总会收敛到局部最优解。</p>
+</div>
+</div>
+<div class="section" id="bgmm">
+<span id="id6"></span><h2>2.1.2. 变分贝叶斯高斯混合<a class="headerlink" href="#bgmm" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><a class="reference internal" href="generated/sklearn.mixture.BayesianGaussianMixture.html#sklearn.mixture.BayesianGaussianMixture" title="sklearn.mixture.BayesianGaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesianGaussianMixture</span></code></a> 对象实现了具有变分的高斯混合模型的变体推理算法。
+这个API和 <a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="sklearn.mixture.GaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> 相似。</div></blockquote>
+<div class="section" id="variational-inference">
+<span id="id7"></span><h3>2.1.2.1. 估计算法: 变分推断（variational inference）<a class="headerlink" href="#variational-inference" title="Permalink to this headline">¶</a></h3>
+<p>变分推断是期望最大化（EM）的扩展，它最大化模型证据（包括先验）的下界，而不是数据似然函数。
+变分方法的原理与期望最大化相同（二者都是迭代算法，在寻找由混合产生的每个点的概率和根据所分配的点拟合之间两步交替），但是变分方法通过整合先验分布信息来增加正则化限制。
+这避免了期望最大化解决方案中常出现的奇异性，但是也对模型带来了微小的偏差。
+变分方法计算过程通常明显较慢，但通常不会慢到无法使用。</p>
+<p>由于它的贝叶斯特性，变分算法比预期最大化（EM）需要更多的超参数（即先验分布中的参数），其中最重要的就是
+浓度参数 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior</span></code> 。指定一个低浓度先验，将会使模型将大部分的权重放在少数分量上，
+其余分量的权重则趋近 0。而高浓度先验将使混合模型中的大部分分量都有一定的权重。 <a class="reference internal" href="generated/sklearn.mixture.BayesianGaussianMixture.html#sklearn.mixture.BayesianGaussianMixture" title="sklearn.mixture.BayesianGaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesianGaussianMixture</span></code></a> 类的参数实现提出了两种权重分布先验：
+一种是利用 Dirichlet distribution（狄利克雷分布）的有限混合模型，另一种是利用 Dirichlet Process（狄利克雷过程）的无限混合模型。
+在实际应用上，狄利克雷过程推理算法是近似的，并且使用具有固定最大分量数的截尾分布（称之为 Stick-breaking representation）。使用的分量数实际上几乎总是取决于数据。</p>
+<p>下图比较了不同类型的权重浓度先验（参数 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior_type</span></code> ）
+不同的 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior</span></code> 的值获得的结果。
+在这里，我们可以发现 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior</span></code> 参数的值对获得的有效的激活分量数（即权重较大的分量的数量）有很大影响。
+我们也能注意到当先验是 ‘dirichlet_distribution’ 类型时，大的浓度权重先验会导致更均匀的权重，然而 ‘dirichlet_process’ 类型（默认类型）却不是这样。</p>
+<p class="centered">
+<strong><a class="reference external" href="../auto_examples/mixture/plot_concentration_prior.html"><img alt="plot_bgmm" src="modules/../auto_examples/mixture/images/sphx_glr_plot_concentration_prior_001.png" /></a> <a class="reference external" href="../auto_examples/mixture/plot_concentration_prior.html"><img alt="plot_dpgmm" src="modules/../auto_examples/mixture/images/sphx_glr_plot_concentration_prior_002.png" /></a></strong></p><p>下面的例子将具有固定数量分量的高斯混合模型与
+Dirichlet process prior（狄利克雷过程先验）的变分高斯混合模型进行比较。
+这里，典型高斯混合模型被指定由 2 个聚类组成的有 5 个分量的数据集。
+我们可以看到，具有狄利克雷过程的变分高斯混合可以将自身限制在 2 个分量，而高斯混合必须按照用户先验设置的固定数量的分量来拟合数据。
+在例子中，用户选择了 <code class="docutils literal notranslate"><span class="pre">n_components=5</span></code> ，这与真正的试用数据集（toy dataset）的生成分量不符。
+稍微观察就能注意到，狄利克雷过程先验的变分高斯混合模型可以采取保守的立场，并且只适合一个分量。</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/mixture/plot_gmm.html"><img alt="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_001.png" src="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_001.png" /></a>
+</div>
+<p>在下图中，我们将拟合一个并不能被高斯混合模型很好描述的数据集。
+调整 <a class="reference internal" href="generated/sklearn.mixture.BayesianGaussianMixture.html#sklearn.mixture.BayesianGaussianMixture" title="sklearn.mixture.BayesianGaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesianGaussianMixture</span></code></a> 类的参数 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior</span></code> ，这个参数决定了用来拟合数据的分量数。我们在最后两个图上展示了从两个混合结果产生的随机抽样。</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="../auto_examples/mixture/plot_gmm_sin.html"><img alt="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_sin_001.png" src="modules/../auto_examples/mixture/images/sphx_glr_plot_gmm_sin_001.png" /></a>
+</div>
+<div class="topic">
+<p class="topic-title first">示例:</p>
+<blockquote>
+<div><ul class="simple">
+<li>一个用 <a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="sklearn.mixture.GaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> 和 <a class="reference internal" href="generated/sklearn.mixture.BayesianGaussianMixture.html#sklearn.mixture.BayesianGaussianMixture" title="sklearn.mixture.BayesianGaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesianGaussianMixture</span></code></a> 绘制置信椭圆体的例子，
+请查阅 <a class="reference internal" href="../auto_examples/mixture/plot_gmm.html#sphx-glr-auto-examples-mixture-plot-gmm-py"><span class="std std-ref">Gaussian Mixture Model Ellipsoids</span></a></li>
+<li><a class="reference internal" href="../auto_examples/mixture/plot_gmm_sin.html#sphx-glr-auto-examples-mixture-plot-gmm-sin-py"><span class="std std-ref">Gaussian Mixture Model Sine Curve</span></a> 这个例子展示了用 <a class="reference internal" href="generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="sklearn.mixture.GaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianMixture</span></code></a> 和 <a class="reference internal" href="generated/sklearn.mixture.BayesianGaussianMixture.html#sklearn.mixture.BayesianGaussianMixture" title="sklearn.mixture.BayesianGaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesianGaussianMixture</span></code></a> 来拟合正弦波。</li>
+<li>一个使用不同的 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior_type</span></code> 用以不同的 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior</span></code> 参数值的:class:<cite>BayesianGaussianMixture</cite> 来绘制置信椭圆体的例子。
+请查阅 <a class="reference internal" href="../auto_examples/mixture/plot_concentration_prior.html#sphx-glr-auto-examples-mixture-plot-concentration-prior-py"><span class="std std-ref">Concentration Prior Type Analysis of Variation Bayesian Gaussian Mixture</span></a></li>
+</ul>
+</div></blockquote>
+<p><a class="reference internal" href="generated/sklearn.mixture.BayesianGaussianMixture.html#sklearn.mixture.BayesianGaussianMixture" title="sklearn.mixture.BayesianGaussianMixture"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesianGaussianMixture</span></code></a> 下的变分推理的优缺点</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="id8">
+<h4>2.1.2.1.1. 优点<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">自动选择:</th><td class="field-body">当 <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior</span></code> 足够小以及
+<code class="docutils literal notranslate"><span class="pre">n_components</span></code> 比模型需要的更大时，变分贝叶斯混合模型计算的结果可以让一些混合权重值趋近 0。
+这让模型可以自动选择合适的有效分量数。这仅仅需要提供分量的数量上限。但是请注意，“理想” 的激活分量数只在应用场景中比较明确，在数据挖掘参数设置中通常并不明确。</td>
+</tr>
+<tr class="field-even field"><th class="field-name">对参数数量的敏感度较低:</th><td class="field-body">与总是用尽可以用的分量，因而将为不同数量的组件产生不同的解决方案有限模型不同，变分推理狄利克雷过程先验变分推理（ <code class="docutils literal notranslate"><span class="pre">weight_concentration_prior_type='dirichlet_process'</span></code> ）改变参数后结果并不会改变太多，使之更稳定和更少的调优。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">正则化:</th><td class="field-body">由于结合了先验信息，变分的解比期望最大化（EM）的解有更少的病理特征（pathological special cases）。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id9">
+<h4>2.1.2.1.2. 缺点<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">速度:</th><td class="field-body">变分推理所需要的额外参数化使推理速度变慢，尽管并没有慢很多。</td>
+</tr>
+<tr class="field-even field"><th class="field-name">超参数:</th><td class="field-body">这个算法需要一个额外的可能需要通过交叉验证进行实验调优的超参数。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">偏差:</th><td class="field-body">在推理算法存在许多隐含的偏差（如果用到狄利克雷过程也会有偏差），
+每当这些偏差和数据之间不匹配时，用有限模型可能可以拟合更好的模型。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="the-dirichlet-process">
+<span id="dirichlet-process"></span><h3>2.1.2.2. The Dirichlet Process（狄利克雷过程）<a class="headerlink" href="#the-dirichlet-process" title="Permalink to this headline">¶</a></h3>
+<p>这里我们描述了狄利克雷过程混合的变分推理算法。狄利克雷过程是在 <em>具有无限大，无限制的分区数的聚类</em> 上的先验概率分布。相比于有限高斯混合模型，变分技术让我们在推理时间几乎没有惩罚（penalty）的情况下纳入了高斯混合模型的先验结构。</p>
+<p>一个重要的问题是狄利克雷过程是如何实现用无限的，无限制的聚类数，并且结果仍然是一致的。
+本文档不做出完整的解释，但是你可以看这里 <a class="reference external" href="https://en.wikipedia.org/wiki/Dirichlet_process#The_stick-breaking_process">stick breaking process</a> 来帮助你理解它。折棍（stick breaking）过程是狄利克雷过程的衍生。我们每次从一个单位长度的 stick 开始，且每一步都折断剩下的一部分。每次，我们把每个 stick 的长度联想成落入一组混合的点的比例。
+最后，为了表示无限混合，我们联想成最后每个 stick 的剩下的部分到没有落入其他组的点的比例。
+每段的长度是随机变量，概率与浓度参数成比例。较小的浓度值将单位长度分成较大的 stick 段（即定义更集中的分布）。较高的浓度值将生成更小的 stick 段（即增加非零权重的分量数）。</p>
+<p>狄利克雷过程的变分推理技术，在对该无限混合模型进行有限近似情形下，仍然可以运用。
+用户不必事先指定想要的分量数，只需要指定浓度参数和混合分量数的上界（假定上界高于“真实”的分量数，仅仅影响算法复杂度，而不是实际上使用的分量数）。</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <!-- modules/mixture.html -->
+    <div class="apachecn_doc_right">
+      校验者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/why2lyj">@why2lyj</a><br/>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@Shao Y.</a><br/>
+      翻译者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@glassy</a><br/>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../_sources/modules/mixture.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="../unsupervised_learning.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="manifold.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>

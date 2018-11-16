@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>如何优化速度 &#8212; scikit-learn 0.19.0 中文文档 - ApacheCN</title>
+<!-- htmltitle is before nature.css - we use this hack to load bootstrap first -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="../_static/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="../_static/css/bootstrap-responsive.css"/>
+
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced installation instructions" href="advanced_installation.html" />
+    <link rel="prev" title="Utilities for Developers" href="utilities.html" />
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="../_static/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel="canonical" href="http://scikit-learn.org/stable/developers/performance.html" />
+
+<script type="text/javascript">
+  $("div.buttonNext, div.buttonPrevious").hover(
+     function () {
+         $(this).css('background-color', '#FF9C34');
+     },
+     function () {
+         $(this).css('background-color', '#A7D6E2');
+     }
+  );
+  function showMenu() {
+    var topNav = document.getElementById("scikit-navbar");
+    if (topNav.className === "navbar") {
+        topNav.className += " responsive";
+    } else {
+        topNav.className = "navbar";
+    }
+  };
+</script>
+
+  </head><body>
+
+<div class="header-wrapper">
+  <div class="header">
+      <p class="logo"><a href="../index.html">
+          <img src="../_static/scikit-learn-logo-small.png" alt="Logo"/>
+      </a>
+      </p><div class="navbar" id="scikit-navbar">
+          <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="../install.html">安装</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="../documentation.html">文档</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="link-title">Scikit-learn 0.19</li>
+                      <li><a href="../tutorial/index.html">教程</a></li>
+                      <li><a href="../user_guide.html">用户指南</a></li>
+                      <li><a href="../modules/classes.html">API</a></li>
+                      <li><a href="../faq.html">FAQ</a></li>
+                      <li><a href="contributing.html">贡献</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://scikit-learn.org/stable/documentation.html">Scikit-learn 0.19 (stable)</a></li>
+                      <li><a href="http://scikit-learn.org/0.18/documentation.html">Scikit-learn 0.18</a></li>
+                      <li><a href="http://scikit-learn.org/0.17/documentation.html">Scikit-learn 0.17</a></li>
+                      <li><a href="../_downloads/scikit-learn-docs.pdf">PDF 文档</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="../auto_examples/index.html">示例</a></li>
+              <li><a href="../project-timeline.html">时光轴</a></li>
+              <li class="btn-li">
+                <div class="btn-group">
+                    <a href="javascript:void(0)">项目相关</a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="../project-role.html">项目角色</a></li>
+                      <li><a href="../project-check-progress.html">校验进度</a></li>
+                      <li><a href="../project-translation-progress.html">翻译进度</a></li>
+                      <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-timeline.html">时光轴</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-reward.html">项目奖励</a></li>
+                      <li class="divider"></li>
+                      <li><a href="http://www.apachecn.org/organization/244.html" target="_blank">积分物品</a></li>
+                      <li><a href="http://www.apachecn.org/organization/269.html" target="_blank">兑换记录</a></li>
+                      <li class="divider"></li>
+                      <li><a href="../project-feedback.html">建议反馈</a></li>
+                      <li><a href="../project-communication-group.html">技术交流</a></li>
+                    </ul>
+                </div>
+              </li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh#%E8%B4%A1%E7%8C%AE%E8%80%85" target="_blank">贡献者</a></li>
+              <li><a href="//github.com/apachecn/scikit-learn-doc-zh" target="_blank">GitHub</a></li>
+          </ul>
+          <a href="javascript:void(0);" onclick="showMenu()">
+              <div class="nav-icon">
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+                  <div class="hamburger-line"></div>
+              </div>
+          </a>
+          <div class="search_form">
+              <div class="gcse-search" id="cse" style="width: 100%;"></div>
+          </div>
+      </div> <!-- end navbar --></div>
+</div>
+
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/apachecn/scikit-learn-doc-zh">
+<img class="fork-me"
+     style="position: absolute; top: 0; right: 0; border: 0;"
+     src="../_static/img/starme.png"
+     alt="Star me on GitHub" />
+</a>
+
+<div class="content-wrapper">
+  <div class="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+      <div class="rel">
+  
+      <div class="rellink">
+      <a href="utilities.html"
+      accesskey="P">Previous
+      <br/>
+      <span class="smallrellink">
+      Utilities for...
+      </span>
+          <span class="hiddenrellink">
+          Utilities for Developers
+          </span>
+      </a>
+      </div>
+          <div class="spacer">
+          &nbsp;
+          </div>
+      <div class="rellink">
+      <a href="advanced_installation.html"
+      accesskey="N">Next
+      <br/>
+      <span class="smallrellink">
+      Advanced inst...
+      </span>
+          <span class="hiddenrellink">
+          Advanced installation instructions
+          </span>
+      </a>
+      </div>
+
+  <!-- Ad a link to the 'up' page -->
+      <div class="spacer">
+      &nbsp;
+      </div>
+      <div class="rellink">
+      <a href="index.html">
+      Up
+      <br/>
+      <span class="smallrellink">
+      Developer’s Guide
+      </span>
+          <span class="hiddenrellink">
+          Developer’s Guide
+          </span>
+          
+      </a>
+      </div>
+  </div>
+  
+    <p class="doc-version"><b>scikit-learn v0.19.0</b><br/>
+    <a href="http://scikit-learn.org/stable/support.html#documentation-resources">Other versions</a></p>
+  <p class="citing">Please <b><a href="../about.html#citing-scikit-learn" style="font-size: 110%;">cite us </a></b>if you use the software.</p>
+  <ul>
+<li><a class="reference internal" href="#">如何优化速度</a><ul>
+<li><a class="reference internal" href="#python-cython-c-c">Python, Cython 还是 C/C++?</a></li>
+<li><a class="reference internal" href="#python">分析 Python 代码</a></li>
+<li><a class="reference internal" href="#id4">内存使用情况分析</a></li>
+<li><a class="reference internal" href="#cython">给 Cython 开发者的性能建议</a></li>
+<li><a class="reference internal" href="#profiling-compiled-extension">分析编译过的扩展</a><ul>
+<li><a class="reference internal" href="#yep-google-perftools">使用 yep 和 google-perftools</a></li>
+<li><a class="reference internal" href="#gprof">使用 gprof</a></li>
+<li><a class="reference internal" href="#valgrind-callgrind-kcachegrind">使用 valgrind / callgrind / kcachegrind</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#joblib-parallel">用 <code class="docutils literal notranslate"><span class="pre">joblib.Parallel</span></code> 进行多核并行</a></li>
+<li><a class="reference internal" href="#warm-restarts">一个算法技巧的例子：交叉验证的热重启</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" checked />
+<label for="nav-trigger"></label>
+
+
+
+
+    <div class="content">
+          
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="performance-howto">
+<span id="id1"></span><h1>如何优化速度<a class="headerlink" href="#performance-howto" title="Permalink to this headline">¶</a></h1>
+<p>这是一篇帮助你写出高效的 scikit-learn 项目代码的实用指南。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>尽管分析代码进而 <strong>检查代码的性能</strong> 往往是有价值的，但在你投入代价高昂的对算法实现的优化工作之前，我们仍然强力推荐你先 <strong>查阅相关文献</strong>，以保证对于当前的任务来说，已经实现（并且你打算优化它的实现）的算法是当前为止最为先进的。</p>
+<p>一次又一次，投入优化复杂的实现细节的努力因随后发现的简单的 <strong>算法技巧</strong>，或者通过使用更适合于该问题的另一种算法而变得无关紧要了。</p>
+<blockquote class="last">
+<div><span class="xref std std-ref">热重启</span> 部分给出了一个这样的技巧的例子</div></blockquote>
+</div>
+<div class="section" id="python-cython-c-c">
+<h2>Python, Cython 还是 C/C++?<a class="headerlink" href="#python-cython-c-c" title="Permalink to this headline">¶</a></h2>
+<p>通常来说，scikit-learn 项目强调源码的 <strong>可读性</strong>，以保证项目的使用者们能轻松地深入源码，理解算法是如何在他们的数据上运作的，同时也让项目的（对于开发者的）可维护性更佳。</p>
+<p>在用 Python 实现一个新算法时，我们建议：<strong>尽量借助 Numpy 和 Scipy 实现它</strong>，注意在代码中避免循环，而改用这些库向量化的方式去完成对应的任务。在实践中，这就意味着尽量 <strong>把任何嵌套的 for 循环替换为等价的 Numpy 数组方法的调用</strong>。我们的目标应该包括避免（或减少） Python 解释器中的 CPU 时间浪费，而不仅仅只是处理一堆数字，让他们拟合你的统计模型（译者注：不知道这样翻译对不对，因为我感觉 avoid CPU wasting time 和 crunch numbers to fit your statistical model 并不是对立的关系，就翻译成递进的关系）。 通常来说最好是参考一下 NumPy 和 SciPy 的性能技巧: <a class="reference external" href="http://scipy.github.io/old-wiki/pages/PerformanceTips">http://scipy.github.io/old-wiki/pages/PerformanceTips</a></p>
+<p>但有时，仅以简单的向量化 Numpy 代码的形式无法有效地表达一个算法。在这种情况下，我们推荐的方法是这样的：</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><strong>分析</strong> 算法的 Python 实现，找到影响性能的主要瓶颈，将它分离出来成为一个 <strong>专用的模块级函数</strong>。这个函数将会以一个编译过的扩展模块的形式被重新实现。</li>
+<li>如果对于同样的算法，已经存在一个维护良好的 BSD 或&nbsp;MIT 许可的 <strong>C/C++</strong> 实现，且规模不大，你可以为它编写一个 <strong>Cython 包装器</strong>， 并在scikit-learn 的源码树中包含一份这个库的源码的拷贝 —— <a class="reference internal" href="../modules/generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC" title="sklearn.svm.LinearSVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">svm.LinearSVC</span></code></a>, <a class="reference internal" href="../modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="sklearn.svm.SVC"><code class="xref py py-class docutils literal notranslate"><span class="pre">svm.SVC</span></code></a> 和 :class:<a href="#id2"><span class="problematic" id="id3">`</span></a>linear_model.LogisticRegression`类采用的就是这种方法（liblinear 和 libsvm 的包装器）。</li>
+<li>你也可以选择直接用 <strong>Cython</strong> 编写一个你的 Python 函数的优化版本。一些类，像 <a class="reference internal" href="../modules/generated/sklearn.linear_model.ElasticNet.html#sklearn.linear_model.ElasticNet" title="sklearn.linear_model.ElasticNet"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.ElasticNet</span></code></a> 和</li>
+</ol>
+</div></blockquote>
+<p><a class="reference internal" href="../modules/generated/sklearn.linear_model.SGDClassifier.html#sklearn.linear_model.SGDClassifier" title="sklearn.linear_model.SGDClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.SGDClassifier</span></code></a>，就是采用这种方法编写的。</p>
+<blockquote>
+<div><ol class="arabic simple" start="4">
+<li><strong>将函数原始的 Python 版本用于测试</strong> ，来检验编译扩展产生的结果是否与高度标准的，易调试的 Python 版本一致。</li>
+<li>一旦确定代码是已经优化过的（通过代码分析无法找到一般的性能瓶颈），就应该确定能否用 <code class="docutils literal notranslate"><span class="pre">joblib.Parallel</span></code> 类实现具有&nbsp;<strong>粗粒度并行性</strong> 的&nbsp;<strong>多进程处理</strong>。</li>
+</ol>
+</div></blockquote>
+<p>在使用 Cython 时，可以用以下指令之一</p>
+<blockquote>
+<div><p>$ python setup.py build_ext -i</p>
+<p>$ python setup.py install</p>
+</div></blockquote>
+<p>来生成 C 文件。你需要自行在各个子模块的 <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> 中添加 .c/.cpp 扩展名和构建参数。</p>
+<p>在我们发布的稳定版本中（译者注：不确定这里是发布的版本还是分布式版本）都嵌入有 C/C++ 生成文件。这样做的目标是使 scikit-learn 的稳定版本在任何带有 Python, Numpy, Scipy 和 C/C++ 编译器的机器上都可以进行安装。</p>
+</div>
+<div class="section" id="python">
+<span id="profiling-python-code"></span><h2>分析 Python 代码<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p>为了分析 Python 代码，我们建议先写好一个加载和准备所需要数据的脚本，然后用 IPython 集成的分析器来交互式地对代码相关的部分进行探索。</p>
+<p>假设我们想要分析 scikit-learn 中的 Non Negative Matrix Factorization (非负矩阵分解) 模块，那么现在我们先开启一个新的 IPython 会话，然后载入 scikit-learn 提供的数字数据集，就和 <a class="reference internal" href="../auto_examples/classification/plot_digits_classification.html#sphx-glr-auto-examples-classification-plot-digits-classification-py"><span class="std std-ref">Recognizing hand-written digits</span></a> 中给出的例子中的一样，我们得到:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">NMF</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_digits</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">X</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>在开始分析会话和投入实验性的优化迭代过程之前，我们先测量想要优化的函数不包含任何分析器开销的总运行时间，然后将其保存起来供以后参考，这一步很重要:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="o">%</span><span class="n">timeit</span> <span class="n">NMF</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="mi">1</span> <span class="n">loops</span><span class="p">,</span> <span class="n">best</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">1.7</span> <span class="n">s</span> <span class="n">per</span> <span class="n">loop</span>
+</pre></div>
+</div>
+<p>用 <code class="docutils literal notranslate"><span class="pre">%prun</span></code> 魔术命令查看总体的性能分析:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="o">%</span><span class="n">prun</span> <span class="o">-</span><span class="n">l</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span> <span class="n">NMF</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+         <span class="mi">14496</span> <span class="n">function</span> <span class="n">calls</span> <span class="ow">in</span> <span class="mf">1.682</span> <span class="n">CPU</span> <span class="n">seconds</span>
+
+   <span class="n">Ordered</span> <span class="n">by</span><span class="p">:</span> <span class="n">internal</span> <span class="n">time</span>
+   <span class="n">List</span> <span class="n">reduced</span> <span class="kn">from</span> <span class="mi">90</span> <span class="n">to</span> <span class="mi">9</span> <span class="n">due</span> <span class="n">to</span> <span class="n">restriction</span> <span class="o">&lt;</span><span class="s1">&#39;nmf.py&#39;</span><span class="o">&gt;</span>
+
+   <span class="n">ncalls</span>  <span class="n">tottime</span>  <span class="n">percall</span>  <span class="n">cumtime</span>  <span class="n">percall</span> <span class="n">filename</span><span class="p">:</span><span class="n">lineno</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+       <span class="mi">36</span>    <span class="mf">0.609</span>    <span class="mf">0.017</span>    <span class="mf">1.499</span>    <span class="mf">0.042</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">151</span><span class="p">(</span><span class="n">_nls_subproblem</span><span class="p">)</span>
+     <span class="mi">1263</span>    <span class="mf">0.157</span>    <span class="mf">0.000</span>    <span class="mf">0.157</span>    <span class="mf">0.000</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">18</span><span class="p">(</span><span class="n">_pos</span><span class="p">)</span>
+        <span class="mi">1</span>    <span class="mf">0.053</span>    <span class="mf">0.053</span>    <span class="mf">1.681</span>    <span class="mf">1.681</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">352</span><span class="p">(</span><span class="n">fit_transform</span><span class="p">)</span>
+      <span class="mi">673</span>    <span class="mf">0.008</span>    <span class="mf">0.000</span>    <span class="mf">0.057</span>    <span class="mf">0.000</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">28</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+        <span class="mi">1</span>    <span class="mf">0.006</span>    <span class="mf">0.006</span>    <span class="mf">0.047</span>    <span class="mf">0.047</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">42</span><span class="p">(</span><span class="n">_initialize_nmf</span><span class="p">)</span>
+       <span class="mi">36</span>    <span class="mf">0.001</span>    <span class="mf">0.000</span>    <span class="mf">0.010</span>    <span class="mf">0.000</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">36</span><span class="p">(</span><span class="n">_sparseness</span><span class="p">)</span>
+       <span class="mi">30</span>    <span class="mf">0.001</span>    <span class="mf">0.000</span>    <span class="mf">0.001</span>    <span class="mf">0.000</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">23</span><span class="p">(</span><span class="n">_neg</span><span class="p">)</span>
+        <span class="mi">1</span>    <span class="mf">0.000</span>    <span class="mf">0.000</span>    <span class="mf">0.000</span>    <span class="mf">0.000</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">337</span><span class="p">(</span><span class="fm">__init__</span><span class="p">)</span>
+        <span class="mi">1</span>    <span class="mf">0.000</span>    <span class="mf">0.000</span>    <span class="mf">1.681</span>    <span class="mf">1.681</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">461</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tottime</span></code> 这一列最为有趣：它给出的是一个函数忽略它的子函数执行后的总执行时间。真实的总时间（局部代码+子函数调用）是在 <code class="docutils literal notranslate"><span class="pre">cumtime</span></code> 列中给出的。</p>
+<p>注意这里我们用 <code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">nmf.py</span></code> 将输出的函数限制在包含 “nmf.py” 这个字符串的行的范围。这对于快速查看 nmf Python 模块自身，而忽略掉其余部分来说非常有用。</p>
+<p>同样的命令，去掉 <code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">nmf.py</span></code> 的筛选之后，输出的开头部分是这样的:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">%</span><span class="n">prun</span> <span class="n">NMF</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+         <span class="mi">16159</span> <span class="n">function</span> <span class="n">calls</span> <span class="ow">in</span> <span class="mf">1.840</span> <span class="n">CPU</span> <span class="n">seconds</span>
+
+   <span class="n">Ordered</span> <span class="n">by</span><span class="p">:</span> <span class="n">internal</span> <span class="n">time</span>
+
+   <span class="n">ncalls</span>  <span class="n">tottime</span>  <span class="n">percall</span>  <span class="n">cumtime</span>  <span class="n">percall</span> <span class="n">filename</span><span class="p">:</span><span class="n">lineno</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+     <span class="mi">2833</span>    <span class="mf">0.653</span>    <span class="mf">0.000</span>    <span class="mf">0.653</span>    <span class="mf">0.000</span> <span class="p">{</span><span class="n">numpy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">_dotblas</span><span class="o">.</span><span class="n">dot</span><span class="p">}</span>
+       <span class="mi">46</span>    <span class="mf">0.651</span>    <span class="mf">0.014</span>    <span class="mf">1.636</span>    <span class="mf">0.036</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">151</span><span class="p">(</span><span class="n">_nls_subproblem</span><span class="p">)</span>
+     <span class="mi">1397</span>    <span class="mf">0.171</span>    <span class="mf">0.000</span>    <span class="mf">0.171</span>    <span class="mf">0.000</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">18</span><span class="p">(</span><span class="n">_pos</span><span class="p">)</span>
+     <span class="mi">2780</span>    <span class="mf">0.167</span>    <span class="mf">0.000</span>    <span class="mf">0.167</span>    <span class="mf">0.000</span> <span class="p">{</span><span class="n">method</span> <span class="s1">&#39;sum&#39;</span> <span class="n">of</span> <span class="s1">&#39;numpy.ndarray&#39;</span> <span class="n">objects</span><span class="p">}</span>
+        <span class="mi">1</span>    <span class="mf">0.064</span>    <span class="mf">0.064</span>    <span class="mf">1.840</span>    <span class="mf">1.840</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">352</span><span class="p">(</span><span class="n">fit_transform</span><span class="p">)</span>
+     <span class="mi">1542</span>    <span class="mf">0.043</span>    <span class="mf">0.000</span>    <span class="mf">0.043</span>    <span class="mf">0.000</span> <span class="p">{</span><span class="n">method</span> <span class="s1">&#39;flatten&#39;</span> <span class="n">of</span> <span class="s1">&#39;numpy.ndarray&#39;</span> <span class="n">objects</span><span class="p">}</span>
+      <span class="mi">337</span>    <span class="mf">0.019</span>    <span class="mf">0.000</span>    <span class="mf">0.019</span>    <span class="mf">0.000</span> <span class="p">{</span><span class="n">method</span> <span class="s1">&#39;all&#39;</span> <span class="n">of</span> <span class="s1">&#39;numpy.ndarray&#39;</span> <span class="n">objects</span><span class="p">}</span>
+     <span class="mi">2734</span>    <span class="mf">0.011</span>    <span class="mf">0.000</span>    <span class="mf">0.181</span>    <span class="mf">0.000</span> <span class="n">fromnumeric</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1185</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>
+        <span class="mi">2</span>    <span class="mf">0.010</span>    <span class="mf">0.005</span>    <span class="mf">0.010</span>    <span class="mf">0.005</span> <span class="p">{</span><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lapack_lite</span><span class="o">.</span><span class="n">dgesdd</span><span class="p">}</span>
+      <span class="mi">748</span>    <span class="mf">0.009</span>    <span class="mf">0.000</span>    <span class="mf">0.065</span>    <span class="mf">0.000</span> <span class="n">nmf</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">28</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>上面的结果告诉我们，代码的执行时间很大程度上来自点乘运算（代由 blas 执行）。因此我们不能指望通过以 Cython 或 C/C++ 重写代码来显著地提高效率：在这个例子中，1.7s (译者注：命令行输出中 fit_transform 的 cumtime 是 1.840s，没搞懂是怎么回事) 的总执行时间中，接近 0.7s 是来自这段我们可以认为已经达到最优的编译过的代码。如果重写 Python 代码中的剩余部分，即使假设我们能在这部分达到 1000% 的效率提升（由于实际代码中的 Python 循环层次较浅，这样的提升不太现实），最终得到的全局速度提升也不会超过 2.4 倍。</p>
+<p>因此在这个例子中，显著的性能提升只能通过 <strong>算法上的改进</strong> 实现（例如，尝试寻找开销高而无用的运算，然后避免它们，而非尝试对这个既定算法做实现上的优化）。</p>
+<p>尽管如此，查看 <code class="docutils literal notranslate"><span class="pre">_nls_subproblem</span></code> 函数的内部究竟发生了些什么仍然是一件有趣的事；如果只考虑 Python 代码，这个函数是程序的热区：它的累计（真实）运行时间几乎占据了整个模块的 100%。为了更好的理解这个具体的函数的运行信息，让我们安装 <code class="docutils literal notranslate"><span class="pre">line_profiler</span></code> 并且将其连接到 IPython:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install line_profiler
+</pre></div>
+</div>
+<ul>
+<li><p class="first"><strong>在 IPython 0.13+ 下</strong>, 先创建一个配置参数文件:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ipython profile create
+</pre></div>
+</div>
+<p>然后在 <code class="docutils literal notranslate"><span class="pre">~/.ipython/profile_default/ipython_config.py</span></code> 中注册 line_profiler 扩展:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;line_profiler&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;line_profiler&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这将在 IPython 终端应用和其他诸如 qtconsole 和 notebook 的前端应用中注册 <code class="docutils literal notranslate"><span class="pre">%lprun</span></code> 魔术命令。</p>
+</li>
+</ul>
+<p>现在让我们重启 IPython ，然后玩玩这个新玩具:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_digits</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">sklearn.decomposition.nmf</span> <span class="k">import</span> <span class="n">_nls_subproblem</span><span class="p">,</span> <span class="n">NMF</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">X</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="o">%</span><span class="n">lprun</span> <span class="o">-</span><span class="n">f</span> <span class="n">_nls_subproblem</span> <span class="n">NMF</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">Timer</span> <span class="n">unit</span><span class="p">:</span> <span class="mf">1e-06</span> <span class="n">s</span>
+
+<span class="n">File</span><span class="p">:</span> <span class="n">sklearn</span><span class="o">/</span><span class="n">decomposition</span><span class="o">/</span><span class="n">nmf</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">_nls_subproblem</span> <span class="n">at</span> <span class="n">line</span> <span class="mi">137</span>
+<span class="n">Total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">1.73153</span> <span class="n">s</span>
+
+<span class="n">Line</span> <span class="c1">#      Hits         Time  Per Hit   % Time  Line Contents</span>
+<span class="o">==============================================================</span>
+   <span class="mi">137</span>                                           <span class="k">def</span> <span class="nf">_nls_subproblem</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H_init</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">):</span>
+   <span class="mi">138</span>                                               <span class="s2">&quot;&quot;&quot;Non-negative least square solver</span>
+<span class="s2">   ...</span>
+<span class="s2">   170                                               &quot;&quot;&quot;</span>
+   <span class="mi">171</span>        <span class="mi">48</span>         <span class="mi">5863</span>    <span class="mf">122.1</span>      <span class="mf">0.3</span>      <span class="k">if</span> <span class="p">(</span><span class="n">H_init</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+   <span class="mi">172</span>                                                   <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Negative values in H_init passed to NLS solver.&quot;</span><span class="p">)</span>
+   <span class="mi">173</span>
+   <span class="mi">174</span>        <span class="mi">48</span>          <span class="mi">139</span>      <span class="mf">2.9</span>      <span class="mf">0.0</span>      <span class="n">H</span> <span class="o">=</span> <span class="n">H_init</span>
+   <span class="mi">175</span>        <span class="mi">48</span>       <span class="mi">112141</span>   <span class="mf">2336.3</span>      <span class="mf">5.8</span>      <span class="n">WtV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>
+   <span class="mi">176</span>        <span class="mi">48</span>        <span class="mi">16144</span>    <span class="mf">336.3</span>      <span class="mf">0.8</span>      <span class="n">WtW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+   <span class="mi">177</span>
+   <span class="mi">178</span>                                               <span class="c1"># values justified in the paper</span>
+   <span class="mi">179</span>        <span class="mi">48</span>          <span class="mi">144</span>      <span class="mf">3.0</span>      <span class="mf">0.0</span>      <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span>
+   <span class="mi">180</span>        <span class="mi">48</span>          <span class="mi">113</span>      <span class="mf">2.4</span>      <span class="mf">0.0</span>      <span class="n">beta</span> <span class="o">=</span> <span class="mf">0.1</span>
+   <span class="mi">181</span>       <span class="mi">638</span>         <span class="mi">1880</span>      <span class="mf">2.9</span>      <span class="mf">0.1</span>      <span class="k">for</span> <span class="n">n_iter</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_iter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+   <span class="mi">182</span>       <span class="mi">638</span>       <span class="mi">195133</span>    <span class="mf">305.9</span>     <span class="mf">10.2</span>          <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">WtW</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span> <span class="o">-</span> <span class="n">WtV</span>
+   <span class="mi">183</span>       <span class="mi">638</span>       <span class="mi">495761</span>    <span class="mf">777.1</span>     <span class="mf">25.9</span>          <span class="n">proj_gradient</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">grad</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">H</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)])</span>
+   <span class="mi">184</span>       <span class="mi">638</span>         <span class="mi">2449</span>      <span class="mf">3.8</span>      <span class="mf">0.1</span>          <span class="k">if</span> <span class="n">proj_gradient</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+   <span class="mi">185</span>        <span class="mi">48</span>          <span class="mi">130</span>      <span class="mf">2.7</span>      <span class="mf">0.0</span>              <span class="k">break</span>
+   <span class="mi">186</span>
+   <span class="mi">187</span>      <span class="mi">1474</span>         <span class="mi">4474</span>      <span class="mf">3.0</span>      <span class="mf">0.2</span>          <span class="k">for</span> <span class="n">inner_iter</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">):</span>
+   <span class="mi">188</span>      <span class="mi">1474</span>        <span class="mi">83833</span>     <span class="mf">56.9</span>      <span class="mf">4.4</span>              <span class="n">Hn</span> <span class="o">=</span> <span class="n">H</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">grad</span>
+   <span class="mi">189</span>                                                       <span class="c1"># Hn = np.where(Hn &gt; 0, Hn, 0)</span>
+   <span class="mi">190</span>      <span class="mi">1474</span>       <span class="mi">194239</span>    <span class="mf">131.8</span>     <span class="mf">10.1</span>              <span class="n">Hn</span> <span class="o">=</span> <span class="n">_pos</span><span class="p">(</span><span class="n">Hn</span><span class="p">)</span>
+   <span class="mi">191</span>      <span class="mi">1474</span>        <span class="mi">48858</span>     <span class="mf">33.1</span>      <span class="mf">2.5</span>              <span class="n">d</span> <span class="o">=</span> <span class="n">Hn</span> <span class="o">-</span> <span class="n">H</span>
+   <span class="mi">192</span>      <span class="mi">1474</span>       <span class="mi">150407</span>    <span class="mf">102.0</span>      <span class="mf">7.8</span>              <span class="n">gradd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">grad</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span>
+   <span class="mi">193</span>      <span class="mi">1474</span>       <span class="mi">515390</span>    <span class="mf">349.7</span>     <span class="mf">26.9</span>              <span class="n">dQd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">WtW</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span>
+   <span class="o">...</span>
+</pre></div>
+</div>
+<p>通过查看 <code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">Time</span></code> 一列中最高的值，我们很容易就能准确地找到那些值得多加注意的代价最高昂的语句。</p>
+</div>
+<div class="section" id="id4">
+<h2>内存使用情况分析<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>在 <a class="reference external" href="https://pypi.python.org/pypi/memory_profiler">memory_profiler</a> 的帮助下你可以详尽地分析任何 Python 代码的内存使用状况。首先，安装这个工具的最新版本:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install -U memory_profiler
+</pre></div>
+</div>
+<p>然后，用与 <code class="docutils literal notranslate"><span class="pre">line_profiler</span></code> 类似的方式配置好魔术命令.</p>
+<ul>
+<li><p class="first"><strong>在 IPython 0.11+ 下</strong>, 先创建一个配置参数文件:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ipython profile create
+</pre></div>
+</div>
+<p>再在 <code class="docutils literal notranslate"><span class="pre">~/.ipython/profile_default/ipython_config.py</span></code> 中紧随 line profiler 之后注册这个扩展:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">TerminalIPythonApp</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;memory_profiler&#39;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;memory_profiler&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这将在 IPython 终端应用和其他诸如 qtconsole 和 notebook 的前端应用中注册 <code class="docutils literal notranslate"><span class="pre">%memit</span></code> 和&nbsp;<code class="docutils literal notranslate"><span class="pre">%mprun</span></code> 魔术命令。</p>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">%mprun</span></code> 对于逐行检查程序中关键函数的内存使用情况十分有用。 它与我们在上一部分中讨论过的 <code class="docutils literal notranslate"><span class="pre">%lprun</span></code> 很相似。 我们来看一个来自 <code class="docutils literal notranslate"><span class="pre">memory_profiler</span></code> <code class="docutils literal notranslate"><span class="pre">examples</span></code> 目录中的例子:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="kn">from</span> <span class="nn">example</span> <span class="k">import</span> <span class="n">my_func</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">%</span><span class="n">mprun</span> <span class="o">-</span><span class="n">f</span> <span class="n">my_func</span> <span class="n">my_func</span><span class="p">()</span>
+<span class="n">Filename</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span>
+
+<span class="n">Line</span> <span class="c1">#    Mem usage  Increment   Line Contents</span>
+<span class="o">==============================================</span>
+     <span class="mi">3</span>                           <span class="nd">@profile</span>
+     <span class="mi">4</span>      <span class="mf">5.97</span> <span class="n">MB</span>    <span class="mf">0.00</span> <span class="n">MB</span>   <span class="k">def</span> <span class="nf">my_func</span><span class="p">():</span>
+     <span class="mi">5</span>     <span class="mf">13.61</span> <span class="n">MB</span>    <span class="mf">7.64</span> <span class="n">MB</span>       <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">6</span><span class="p">)</span>
+     <span class="mi">6</span>    <span class="mf">166.20</span> <span class="n">MB</span>  <span class="mf">152.59</span> <span class="n">MB</span>       <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">7</span><span class="p">)</span>
+     <span class="mi">7</span>     <span class="mf">13.61</span> <span class="n">MB</span> <span class="o">-</span><span class="mf">152.59</span> <span class="n">MB</span>       <span class="k">del</span> <span class="n">b</span>
+     <span class="mi">8</span>     <span class="mf">13.61</span> <span class="n">MB</span>    <span class="mf">0.00</span> <span class="n">MB</span>       <span class="k">return</span> <span class="n">a</span>
+</pre></div>
+</div>
+<p>另外一个&nbsp;<code class="docutils literal notranslate"><span class="pre">memory_profiler</span></code> 定义的实用的魔术命令就是 <code class="docutils literal notranslate"><span class="pre">%memit</span></code>，它可以看作是 <code class="docutils literal notranslate"><span class="pre">%timeit</span></code> 的类比。你可以这样使用它:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">%</span><span class="n">memit</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mf">1e7</span><span class="p">)</span>
+<span class="n">maximum</span> <span class="n">of</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">76.402344</span> <span class="n">MB</span> <span class="n">per</span> <span class="n">loop</span>
+</pre></div>
+</div>
+<p>想知道更多细节，你可以用 <code class="docutils literal notranslate"><span class="pre">%memit?</span></code> 和 <code class="docutils literal notranslate"><span class="pre">%mprun?</span></code> 指令查看这些魔术命令的文档字符串。</p>
+</div>
+<div class="section" id="cython">
+<h2>给 Cython 开发者的性能建议<a class="headerlink" href="#cython" title="Permalink to this headline">¶</a></h2>
+<p>如果 Python 代码分析显示， Python 解释器的开销比实际数值计算的开销要高上一个或更多数量级（例如，向量组件上的 <code class="docutils literal notranslate"><span class="pre">for</span></code> 循环，条件表达式的嵌套求值，标量运算…），那么提取代码的热点部分到一个 <code class="docutils literal notranslate"><span class="pre">.pyx</span></code> 文件中作为独立的函数，增加静态类型声明，然后用 Cython 生成适合编译成 Python 扩展模块的 C 程序可能是不错的做法。</p>
+<p>在 <a class="reference external" href="http://docs.cython.org/">http://docs.cython.org/</a> 上可以找到的官方文档中有一份教程和一份开发这样一个模块的参考指南。下面我们只重点展示在 scikit-learn 项目现存的 cython 代码库上我们发现在实践中比较重要的几个技巧。</p>
+<p>TODO: 网页报表（译者注：好像混入了什么奇怪的东西），类型声明，边界检验，处理零检查，内存对齐，blas 的直接调用…</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.youtube.com/watch?v=gMvkiQ-gOW8">https://www.youtube.com/watch?v=gMvkiQ-gOW8</a></li>
+<li><a class="reference external" href="http://conference.scipy.org/proceedings/SciPy2009/paper_1/">http://conference.scipy.org/proceedings/SciPy2009/paper_1/</a></li>
+<li><a class="reference external" href="http://conference.scipy.org/proceedings/SciPy2009/paper_2/">http://conference.scipy.org/proceedings/SciPy2009/paper_2/</a></li>
+</ul>
+</div>
+<div class="section" id="profiling-compiled-extension">
+<span id="id5"></span><h2>分析编译过的扩展<a class="headerlink" href="#profiling-compiled-extension" title="Permalink to this headline">¶</a></h2>
+<p>面对编译过的扩展（包装器包装下的 C/C++ 程序，或者直接由 Cython 编写的扩展），默认的 Python 分析器是无用武之地的：我们需要一个专用的用于深入检视编译过的扩展内部所进行的活动的工具。</p>
+<div class="section" id="yep-google-perftools">
+<h3>使用 yep 和 google-perftools<a class="headerlink" href="#yep-google-perftools" title="Permalink to this headline">¶</a></h3>
+<p>用 yep 对不带特殊编译选项的编译扩展进行简单分析（译者注：并不确定 without special compilation 是指 extension 还是指 yep）：</p>
+<ul class="simple">
+<li><a class="reference external" href="https://pypi.python.org/pypi/yep">https://pypi.python.org/pypi/yep</a></li>
+<li><a class="reference external" href="http://fa.bianp.net/blog/2011/a-profiler-for-python-extensions">http://fa.bianp.net/blog/2011/a-profiler-for-python-extensions</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">google-perftools 提供了一个很好的 “逐行” 报告模式，可以用 <code class="docutils literal notranslate"><span class="pre">--lines</span></code> 触发。但是其运作似乎在写入的时候有些问题。这个问题在 <a class="reference external" href="https://github.com/gperftools/gperftools">project issue tracker</a> 上可以追踪。</p>
+</div>
+</div>
+<div class="section" id="gprof">
+<h3>使用 gprof<a class="headerlink" href="#gprof" title="Permalink to this headline">¶</a></h3>
+<p>在用 <code class="docutils literal notranslate"><span class="pre">gcc</span> <span class="pre">-pg</span></code> 和在 debian / ubuntu 上通过 <code class="docutils literal notranslate"><span class="pre">python-dbg</span></code> 生成的解释器变种重新编译了项目后，你可以用 <code class="docutils literal notranslate"><span class="pre">gporf</span></code> 来分析编译过的 Python 扩展：但是这种方法还要求有用 <code class="docutils literal notranslate"><span class="pre">-pg</span></code> 重新编译过的 <code class="docutils literal notranslate"><span class="pre">numpy</span></code> 和 <code class="docutils literal notranslate"><span class="pre">scipy</span></code>，而这一步从某种程度上来说是很复杂的。</p>
+<p>幸运的是，现在已经有两款其他分析器可供替代，无需重新编译一切就能进行代码分析。</p>
+</div>
+<div class="section" id="valgrind-callgrind-kcachegrind">
+<h3>使用 valgrind / callgrind / kcachegrind<a class="headerlink" href="#valgrind-callgrind-kcachegrind" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+</div>
+<div class="section" id="joblib-parallel">
+<h2>用 <code class="docutils literal notranslate"><span class="pre">joblib.Parallel</span></code> 进行多核并行<a class="headerlink" href="#joblib-parallel" title="Permalink to this headline">¶</a></h2>
+<p>TODO: 在这举一个简单有意思的例子。</p>
+<p>查阅 joblib 的官方文档：</p>
+<ul class="simple">
+<li><a class="reference external" href="https://pythonhosted.org/joblib">https://pythonhosted.org/joblib</a></li>
+</ul>
+</div>
+<div class="section" id="warm-restarts">
+<span id="id6"></span><h2>一个算法技巧的例子：交叉验证的热重启<a class="headerlink" href="#warm-restarts" title="Permalink to this headline">¶</a></h2>
+<p>TODO: 展示坐标下降线性回归的交叉验证的热重启技巧</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+
+      <!-- 评论留言区代码 start -->
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAwMi8xMDU0MA==">
+        <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+        </script>
+      </div>
+      <!-- 评论留言区代码 end -->
+
+    </div>
+
+    <!-- 提 PR 时按原来文档的字母排序 -->
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <!-- developers/performance.html -->
+    <div class="apachecn_doc_right">
+      校验者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/apachecn/scikit-learn-doc-zh">@那伊抹微笑</a><br/>
+      翻译者: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/JanzenLiu">@JanzenLiu</a><br/>
+    </div>
+    
+
+    
+
+    
+
+  </div>
+
+  <div class="footer">
+      &copy; 2007 - 2017, scikit-learn developers (BSD License).
+    <a href="../_sources/developers/performance.rst.txt" rel="nofollow">Show this page source</a>
+  </div>
+   <div class="rel">
+  
+  <div class="buttonPrevious">
+    <a href="utilities.html">Previous
+    </a>
+  </div>
+  <div class="buttonNext">
+    <a href="advanced_installation.html">Next
+    </a>
+  </div>
+  
+   </div>
+
+  <!-- google analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-102475051-5', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+  
+  <!-- baidu tongji -->
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?9cbab13b4d28a9811ae1d2d2176dab66";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <!-- baidu push -->
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+  </body>
+</html>
